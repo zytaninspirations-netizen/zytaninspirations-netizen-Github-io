@@ -266,8 +266,12 @@
     <button class="tab-btn" onclick="filterCategory('breakfast', event)">Breakfast / ቁርስ</button>
     <button class="tab-btn" onclick="filterCategory('burger', event)">Burgers / በርገር</button>
     <button class="tab-btn" onclick="filterCategory('pizza', event)">Pizza / ፒዛ</button>
+    <button class="tab-btn" onclick="filterCategory('salad', event)">Salad / ሳላድ</button>
+    <button class="tab-btn" onclick="filterCategory('lunch', event)">Lunch / ምሳ</button>
     <button class="tab-btn" onclick="filterCategory('sandwich', event)">Sandwich / ሳንድዊች</button>
-    <button class="tab-btn" onclick="filterCategory('juices', event)">Juices & Drinks / ጁስ እና መጠጦች</button>
+    <button class="tab-btn" onclick="filterCategory('juices', event)">Juices & Drinks / ጁስ እና ስሙዚ</button>
+    <button class="tab-btn" onclick="filterCategory('beverages', event)">Beverages / ለስላሳ እና ትኩስ</button>
+    <button class="tab-btn" onclick="filterCategory('extras', event)">Extras / ተጨማሪ</button>
   </nav>
 
   <!-- Main Menu Container -->
@@ -289,39 +293,39 @@
 
   <script>
     const MENU_DATA = [
-            // Breakfast / ቁርስ
+      // Breakfast / ቁርስ
       { category: 'breakfast', name: 'Scramble Egg / እንቁላል ፍርፍር', price: '300 ETB', ingredients: 'Egg, Toasted Bread, Tomato, & Onion' },
       { category: 'breakfast', name: 'Special Omlet / ስፔሻል ኦምሌት', price: '400 ETB', ingredients: 'Egg, Toasted, Black Olive, Mozzarella Cheese & Minced beef' },
-      { category: 'breakfast', name: 'Omlet / ኦምሌት', price: '310 ETB', ingredients: 'Egg, Tomato, Onion, Green Paper & Toasted Bread' },
-      { category: 'breakfast', name: 'Egg Sandwich / እንቁላል ሳንዱዊች', price: '380 ETB', ingredients: 'Egg, Tomato, Onion, Green Paper & Toasted Bread' },
+      { category: 'breakfast', name: 'Omlet / ኦምሌት', price: '310 ETB', ingredients: 'Egg, Tomato, Onion, Green Pepper & Toasted Bread' },
+      { category: 'breakfast', name: 'Egg Sandwich / እንቁላል ሳንዱዊች', price: '380 ETB', ingredients: 'Egg, Tomato, Onion, Green Pepper & Toasted Bread' },
       { category: 'breakfast', name: 'Cheese Omlet / ቺዝ ኦምሌት', price: '340 ETB', ingredients: 'Egg, Tomato, Onion, Mozzarella & Toasted Bread' },
       { category: 'breakfast', name: 'Chechebsa / ጨጨብሳ', price: '290 ETB', ingredients: 'Traditional Ethiopian flatbread pieces' },
       { category: 'breakfast', name: 'Fetira with Honey / ፈጢራ በማር', price: '290 ETB', ingredients: 'Flaky layered pastry with honey' },
       { category: 'breakfast', name: 'Fetira with Egg / ፈጢራ በእንቁላል', price: '340 ETB', ingredients: 'Flaky layered pastry with egg' },
 
       // Burgers / በርገር & Fries
-      { category: 'burger', name: 'Double Burger / ዱብል ስፔሻል በርገር', price: '650 ETB', ingredients: 'Double beef patty, Double cheese, onion, Tomato, Mayonnaise, Egg & Ketchup' },
-      { category: 'burger', name: 'Cheese Burger / ቺዝ በርገር', price: '480 ETB', ingredients: 'Beef Patty, Cheese, Mayonnase, Ketchup, Onion, Tomato & Lattuce' },
-      { category: 'burger', name: 'Beef Burger / ቢፍ በርገር', price: '440 ETB', ingredients: 'Beel Patty, Mayonnase, Ketchup, Onion, Tomato & Lattuce' },
+      { category: 'burger', name: 'Double Burger / ዱብል ስፔሻል በርገር', price: '650 ETB', ingredients: 'Double beef patty, Double cheese, Onion, Tomato, Mayonnaise, Egg & Ketchup' },
+      { category: 'burger', name: 'Cheese Burger / ቺዝ በርገር', price: '480 ETB', ingredients: 'Beef Patty, Cheese, Mayonnaise, Ketchup, Onion, Tomato & Lettuce' },
+      { category: 'burger', name: 'Beef Burger / ቢፍ በርገር', price: '440 ETB', ingredients: 'Beef Patty, Mayonnaise, Ketchup, Onion, Tomato & Lettuce' },
       { category: 'burger', name: 'Tuna Burger / ቱና በርገር', price: '480 ETB', ingredients: 'Tuna, Ketchup, Onion & Tomato' },
-      { category: 'burger', name: 'Fish Burger / ፊሽ በርገር', price: '400 ETB', ingredients: 'Fish, Ketchup, Onion, Tomato & Lattuce' },
-      { category: 'burger', name: 'Chicken Burger / ቺክን በርገር', price: '480 ETB', ingredients: 'Chicken, Mayonnase, Ketchup, Onion, Tomato & Lattuce' },
+      { category: 'burger', name: 'Fish Burger / ፊሽ በርገር', price: '400 ETB', ingredients: 'Fish, Ketchup, Onion, Tomato & Lettuce' },
+      { category: 'burger', name: 'Chicken Burger / ቺክን በርገር', price: '480 ETB', ingredients: 'Chicken, Mayonnaise, Ketchup, Onion, Tomato & Lettuce' },
       { category: 'burger', name: 'Chips / ቺፕስ', price: '260 ETB', ingredients: 'French fries' },
 
       // Pizza / ፒዛ
-      { category: 'pizza', name: 'Double Pizza / ዱብል ፒዛ', price: '780 ETB', ingredients: 'Tomato sauce, Mozzarella Cheese, Beef, Chicken, Egg, Black Olive Green papper, Oregano & Garlic Oil' },
-      { category: 'pizza', name: 'Pizza Chicken / ቺክን ፒዛ', price: '680 ETB', ingredients: 'Tomato sauce, Mozzarella Cheese, Chicken, Black Olive, Green papper, Oregano & Garlic oil' },
-      { category: 'pizza', name: 'Pizza Beef / ቢፍ ፒዛ', price: '580 ETB', ingredients: 'Tomato sauce, Mozzarella Cheese, Beef, onion, Green papper & Olive oil' },
-      { category: 'pizza', name: 'AL Tuna Pizza / አል ቱና ፒዛ', price: '550 ETB', ingredients: 'Tomato sauce, Tuna, Mozzarella, Cheese, onion, Green paper, Oragano & Garlic Oil' },
-      { category: 'pizza', name: 'Pizza Tuna Fasting / የጾም ቱና ፒዛ', price: '480 ETB', ingredients: 'Tomato sauce, Tuna, onion, Green paper, Oregano & Garlic Oil' },
-      { category: 'pizza', name: 'Pizza Margaritha / ፒዛ ማርጋሪታ', price: '470 ETB', ingredients: 'Tomato, cheese, & Garlic oil' },
-      { category: 'pizza', name: 'Vegitable Pizza / ቬጅቴብል ፒዛ', price: '390 ETB', ingredients: 'Tomato sauce, vegetable, black olive & Garlic oil' },
-      { category: 'pizza', name: 'Special Fasting Tuna / ስፔሻል የጾም ቱና', price: '510 ETB', ingredients: 'Tuna, Vegetable, Onion, Tomato sauce, & Green paper' },
+      { category: 'pizza', name: 'Double Pizza / ዱብል ፒዛ', price: '780 ETB', ingredients: 'Tomato sauce, Mozzarella Cheese, Beef, Chicken, Egg, Black Olive, Green Pepper, Oregano & Garlic Oil' },
+      { category: 'pizza', name: 'Pizza Chicken / ቺክን ፒዛ', price: '680 ETB', ingredients: 'Tomato sauce, Mozzarella Cheese, Chicken, Black Olive, Green Pepper, Oregano & Garlic oil' },
+      { category: 'pizza', name: 'Pizza Beef / ቢፍ ፒዛ', price: '580 ETB', ingredients: 'Tomato sauce, Mozzarella Cheese, Beef, Onion, Green Pepper & Olive oil' },
+      { category: 'pizza', name: 'AL Tuna Pizza / አል ቱና ፒዛ', price: '550 ETB', ingredients: 'Tomato sauce, Tuna, Mozzarella Cheese, Onion, Green Pepper, Oregano & Garlic Oil' },
+      { category: 'pizza', name: 'Pizza Tuna Fasting / የጾም ቱና ፒዛ', price: '480 ETB', ingredients: 'Tomato sauce, Tuna, Onion, Green Pepper, Oregano & Garlic Oil' },
+      { category: 'pizza', name: 'Pizza Margaritha / ፒዛ ማርጋሪታ', price: '470 ETB', ingredients: 'Tomato, Cheese, & Garlic oil' },
+      { category: 'pizza', name: 'Vegitable Pizza / ቬጅቴብል ፒዛ', price: '390 ETB', ingredients: 'Tomato sauce, Vegetable, Black Olive & Garlic oil' },
+      { category: 'pizza', name: 'Special Fasting Tuna / ስፔሻል የጾም ቱና', price: '510 ETB', ingredients: 'Tuna, Vegetable, Onion, Tomato sauce, & Green Pepper' },
 
       // Salad / ሳላድ
-      { category: 'salad', name: 'Mixed Salad / ድብልቅ ሳላድ', price: '320 ETB', ingredients: 'Lettuce, Carrot, Tomato, Onion, Green paper, Blac olive & Dressing' },
-      { category: 'salad', name: 'Tuna Salad / ቱና ሳላድ', price: '370 ETB', ingredients: 'Tuna, Lettuce, Carrot, Tomato, Onion, Green paper, Blac olive' },
-      { category: 'salad', name: 'Fruit Punch / ድብልቅ እጅ ፍሬች', price: '320 ETB', ingredients: 'Avocado, mango, papaya, Salad' },
+      { category: 'salad', name: 'Mixed Salad / ድብልቅ ሳላድ', price: '320 ETB', ingredients: 'Lettuce, Carrot, Tomato, Onion, Green Pepper, Black Olive & Dressing' },
+      { category: 'salad', name: 'Tuna Salad / ቱና ሳላድ', price: '370 ETB', ingredients: 'Tuna, Lettuce, Carrot, Tomato, Onion, Green Pepper, Black Olive' },
+      { category: 'salad', name: 'Fruit Punch / ድብልቅ እጅ ፍሬች', price: '320 ETB', ingredients: 'Avocado, Mango, Papaya, Salad' },
 
       // Lunch / ምሳ
       { category: 'lunch', name: 'Tibs FirFir / ጥብስ ፍርፍር', price: '450 ETB', ingredients: 'Sautéed meat pieces mixed with injera/bread' },
@@ -338,11 +342,11 @@
       // Sandwich / ሳንድዊች
       { category: 'sandwich', name: 'Club Sandwich / ክለብ ሳንዱዊች', price: '580 ETB', ingredients: 'Chicken, Lettuce, Onion, Tomato, Mayonnaise & Provolone Cheese' },
       { category: 'sandwich', name: 'Club Sandwich Half / ግማሽ ክለብ ሳንዱዊች', price: '430 ETB', ingredients: 'Chicken, Lettuce, Onion, Tomato, Mayonnaise & Provolone Cheese' },
-      { category: 'sandwich', name: 'Tuna Sandwich / ቱና ሳንዱዊች', price: '420 ETB', ingredients: 'Tuna, Onion, Tomato, & Green Paper' },
-      { category: 'sandwich', name: 'Chicken Sandwich / ዶሮ ሳንዱዊች', price: '470 ETB', ingredients: 'Ketchup, Onion, Green Paper, Mayonnase, Chicken & Lettuce' },
-      { category: 'sandwich', name: 'Vegetable Sandwich / አትክልት ሳንዱዊች', price: '300 ETB', ingredients: 'Vegetable, Onion Green Paper & Ketchup' },
-      { category: 'sandwich', name: 'Tuna Club / ቱና ክለብ', price: '530 ETB', ingredients: 'Vegetable, Onion, Tuna, Green Paper & Ketchup' },
-      { category: 'sandwich', name: 'Vegetable Club / አትክልት ክለብ', price: '350 ETB', ingredients: 'Vegetable, Onion, Green Paper & Ketchup' },
+      { category: 'sandwich', name: 'Tuna Sandwich / ቱና ሳንዱዊች', price: '420 ETB', ingredients: 'Tuna, Onion, Tomato, & Green Pepper' },
+      { category: 'sandwich', name: 'Chicken Sandwich / ዶሮ ሳንዱዊች', price: '470 ETB', ingredients: 'Ketchup, Onion, Green Pepper, Mayonnaise, Chicken & Lettuce' },
+      { category: 'sandwich', name: 'Vegetable Sandwich / አትክልት ሳንዱዊች', price: '300 ETB', ingredients: 'Vegetable, Onion, Green Pepper & Ketchup' },
+      { category: 'sandwich', name: 'Tuna Club / ቱና ክለብ', price: '530 ETB', ingredients: 'Vegetable, Onion, Tuna, Green Pepper & Ketchup' },
+      { category: 'sandwich', name: 'Vegetable Club / አትክልት ክለብ', price: '350 ETB', ingredients: 'Vegetable, Onion, Green Pepper & Ketchup' },
       { category: 'sandwich', name: 'Chicken Wrap / ቺክን ራፕ', price: '560 ETB', ingredients: 'Chicken, Lettuce, Onion, Tomato, & Ketchup' },
 
       // Juice & Smoothies / ጁስ እና ስሙዚ
@@ -393,7 +397,7 @@
       { category: 'extras', name: 'Extra Chille', price: '35 ETB', ingredients: 'Extra chili' },
       { category: 'extras', name: 'Extra Mayonnaise', price: '35 ETB', ingredients: 'Extra mayo' },
       { category: 'extras', name: 'Extra Ketchup', price: '35 ETB', ingredients: 'Extra ketchup' }
-
+    ];
 
     function renderMenu(items) {
       const container = document.getElementById('menuContainer');
