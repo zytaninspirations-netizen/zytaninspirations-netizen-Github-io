@@ -514,7 +514,7 @@ function buildShell(){
   <div><h5>Explore</h5>${NAV.slice(0,4).map(([h,t])=>`<a href="#/${h}">${t}</a>`).join('')}</div>
   <div><h5>Business</h5>${NAV.slice(4).map(([h,t])=>`<a href="#/${h}">${t}</a>`).join('')}<a href="#/register">Register your café</a></div>
   <div><h5>Reach us</h5><a href="${CONFIG.whatsapp}" target="_blank" rel="noopener">WhatsApp</a><a href="${CONFIG.telegram}" target="_blank" rel="noopener">Telegram</a><a href="tel:${CONFIG.phone}">${CONFIG.phone}</a><a href="#/login">Restaurant login</a><a href="#/admin">Team admin</a></div></div>
-  <div class="copy"><span>© 2026 Zaytan Inspirations. All rights reserved.</span><span>Made with care in Addis Ababa.</span></div>`;
+  <div class="copy"><span>© 2026 Zeki.Ai All rights reserved.</span><span>Made with ŽƐVIČ̣ in AddisAbaba.</span></div>`;
   setTheme(localStorage.getItem('zaytan.theme')||'dark');
 }
 function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem('zaytan.theme',t)}catch(e){}$('#themeBtn').innerHTML=icon(t==='dark'?'sun':'moon');$('meta[name=theme-color]').content=t==='dark'?'#0a0e0c':'#f7f6ef'}
