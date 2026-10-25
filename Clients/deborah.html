@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dቦራ Pizza & Burger — Menu</title>
+<meta name="description" content="Menu of Dቦራ Pizza & Burger. Order by calling +251966323232.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍕</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8ee;--card:#fff;--ink:#2a1a14;--mute:#7a665a;--red:#d62f1f;--red2:#ff6a3d;--gold:#f6b93b;--green:#2e8b57;--line:#f0dfcb;--sh:0 6px 20px rgba(120,60,20,.10)}
+@media(prefers-color-scheme:dark){:root{--bg:#1a110d;--card:#271a14;--ink:#fff1e3;--mute:#c2a898;--line:#3a2a21;--sh:0 6px 20px rgba(0,0,0,.4)}}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font:16px/1.5 Inter,"Noto Sans Ethiopic",Nyala,system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:84px}
+.hero{position:relative;overflow:hidden;color:#fff;text-align:center;padding:calc(48px + env(safe-area-inset-top,0px)) 20px 64px;background:radial-gradient(circle at 20% 20%,#ff8a4c,transparent 45%),radial-gradient(circle at 85% 80%,#f6b93b,transparent 40%),linear-gradient(135deg,#c1271a,#e8472b)}
+.hero:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:30px;background:var(--bg);clip-path:ellipse(55% 100% at 50% 100%)}
+.float{position:absolute;font-size:34px;opacity:.28;animation:fl 7s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-14px) rotate(10deg)}}
+.hero h1{font:900 clamp(36px,9vw,68px)/1.05 Fraunces,Georgia,serif;position:relative}
+.hero h1 small{display:block;font:600 clamp(15px,3.5vw,22px) Inter,sans-serif;letter-spacing:.35em;text-transform:uppercase;margin-top:8px;opacity:.95}
+.hero p{margin:14px auto 22px;max-width:520px;position:relative;opacity:.95}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font:700 16px Inter,sans-serif;text-decoration:none;border-radius:999px;padding:14px 24px;transition:transform .15s}
+.btn:active{transform:scale(.96)}
+.btn.call{background:#fff;color:var(--red);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.btn.ghost{background:rgba(255,255,255,.18);color:#fff;border:2px solid rgba(255,255,255,.7)}
+.hero .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.bar{position:sticky;top:0;z-index:20;background:var(--bg);padding:calc(10px + env(safe-area-inset-top,0px)) 0 8px;border-bottom:1px solid var(--line)}
+.tools{display:flex;gap:8px;max-width:900px;margin:0 auto 8px;padding:0 14px}
+.tools input{flex:1;min-width:0;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:11px 16px;font:inherit}
+.tools input:focus{outline:0;border-color:var(--red2)}
+.tg{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:0 14px;font:600 14px Inter;cursor:pointer;white-space:nowrap}
+.tg.on{background:var(--green);border-color:var(--green);color:#fff}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 14px;scrollbar-width:none;max-width:900px;margin:auto}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:0;cursor:pointer;background:var(--card);color:var(--ink);padding:9px 15px;border-radius:999px;font:600 14px Inter;box-shadow:var(--sh)}
+.chip.on{background:var(--red);color:#fff}
+main{max-width:900px;margin:0 auto;padding:10px 14px}
+section{scroll-margin-top:130px;margin-top:26px}
+section h2{font:900 28px Fraunces,Georgia,serif;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+section h2 span{font:600 15px "Noto Sans Ethiopic",Nyala,sans-serif;color:var(--red2)}
+.grid{display:grid;gap:12px;margin-top:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr))}
+.item{background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:var(--sh);border-left:5px solid var(--gold);animation:in .4s both}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.nm{font-weight:700;line-height:1.3}
+.am{display:block;font:600 14px "Noto Sans Ethiopic",Nyala,sans-serif;color:var(--red2)}
+.pr{flex:none;background:var(--red);color:#fff;font-weight:700;font-size:14px;padding:4px 11px;border-radius:999px;white-space:nowrap}
+.ing{color:var(--mute);font-size:14px;margin-top:6px}
+.fast{display:inline-block;margin-top:8px;background:#e3f4ea;color:var(--green);font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px}
+.none{text-align:center;color:var(--mute);padding:40px 0}
+.note{margin-top:30px;background:var(--card);border:2px dashed var(--red2);border-radius:16px;padding:16px;text-align:center}
+.cta{margin:36px 0 0;border-radius:22px;padding:26px 20px;text-align:center;background:linear-gradient(135deg,#24120c,#4a2216);color:#fff}
+.cta h3{font:900 22px Fraunces,serif}
+.cta p{opacity:.8;margin:6px 0 16px}
+.btn.tgm{background:#2aabee;color:#fff}
+footer{text-align:center;color:var(--mute);font-size:13px;padding:22px 14px}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:10px;justify-content:center;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg) 40%)}
+.dock .btn{box-shadow:0 8px 22px rgba(0,0,0,.25)}
+.dock .main{background:var(--red);color:#fff;flex:1;max-width:340px;justify-content:center;animation:pulse 2.4s infinite}
+.dock .sur{background:var(--gold);color:#2a1a14}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(214,47,31,.5)}70%,100%{box-shadow:0 0 0 14px transparent}}
+dialog{border:0;border-radius:24px;padding:28px 22px;max-width:380px;width:calc(100% - 32px);background:var(--card);color:var(--ink);text-align:center;margin:auto}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog .big{font-size:56px}
+dialog h3{font:900 24px Fraunces,serif;margin:6px 0}
+dialog .row{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+dialog .btn.call{background:var(--red);color:#fff;box-shadow:none}
+dialog .btn.alt{background:var(--line);color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="float" style="left:7%;top:18%">🍕</span><span class="float" style="right:8%;top:14%;animation-delay:-2s">🍔</span>
+  <span class="float" style="left:14%;bottom:22%;animation-delay:-4s">🥤</span><span class="float" style="right:15%;bottom:26%;animation-delay:-1s">🍳</span>
+  <h1>Dቦራ<small>Pizza &amp; Burger</small></h1>
+  <p>Fresh, hot and made your way. Browse the menu, then pick up the phone — that's how you order! 📞</p>
+  <div class="row">
+    <a class="btn call" href="tel:+251966323232">📞 Call to Order</a>
+    <button class="btn ghost" onclick="surprise()">🎲 Surprise me</button>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="tools">
+    <input id="q" type="search" placeholder="🔍 Search pizza, tuna, ጥብስ…" aria-label="Search menu">
+    <button class="tg" id="fz" aria-pressed="false">🌿 Fasting</button>
+  </div>
+  <nav class="chips" id="chips" aria-label="Menu categories"></nav>
+</div>
+
+<main>
+  <div id="menu"></div>
+  <div class="note">📞 <b>Orders by phone only.</b> Call <a href="tel:+251966323232" style="color:var(--red);font-weight:700">+251 966 323 232</a> and tell us what you'd like.</div>
+
+  <div class="cta">
+    <h3>Own a café or restaurant?</h3>
+    <p>Get a beautiful digital menu website like this one.</p>
+    <a class="btn tgm" href="https://t.me/zaytans" target="_blank" rel="noopener">✈️ Order your menu now</a>
+  </div>
+</main>
+
+<footer>© <span id="y"></span> Dቦራ Pizza &amp; Burger · Prices in Ethiopian Birr (ETB)</footer>
+
+<div class="dock">
+  <a class="btn main" href="tel:+251966323232">📞 Call to Order · +251966323232</a>
+  <button class="btn sur" onclick="surprise()" aria-label="Surprise me">🎲</button>
+</div>
+
+<dialog id="dlg">
+  <div class="big" id="dE"></div>
+  <p style="color:var(--mute);font-size:13px">Today you should try…</p>
+  <h3 id="dN"></h3>
+  <p class="am" id="dA" style="font-weight:600;color:var(--red2)"></p>
+  <p class="ing" id="dI"></p>
+  <p style="font-weight:800;font-size:20px;margin-top:8px" id="dP"></p>
+  <div class="row">
+    <a class="btn call" href="tel:+251966323232">📞 Call to order</a>
+    <button class="btn alt" onclick="surprise()">🎲 Another</button>
+    <button class="btn alt" onclick="dlg.close()">Close</button>
+  </div>
+</dialog>
+
+<script>
+// [category id, emoji, English title, Amharic title, items]; item = [name, price, ingredients, fasting?]
+const M=[
+['breakfast','🍳','Breakfast','ቁርስ',[
+['Scramble Egg / እንቁላል ፍርፍር',300,'Egg, Toasted Bread, Tomato & Onion'],
+['Special Omelet / ስፔሻል ኦምሌት',400,'Egg, Toasted Bread, Black Olive, Mozzarella Cheese & Minced Beef'],
+['Omelet / ኦምሌት',310,'Egg, Tomato, Onion, Green Pepper & Toasted Bread'],
+['Egg Sandwich / እንቁላል ሳንዱዊች',380,'Egg, Tomato, Onion, Green Pepper & Toasted Bread'],
+['Cheese Omelet / ቺዝ ኦምሌት',340,'Egg, Tomato, Onion, Mozzarella & Toasted Bread'],
+['Chechebsa / ጨጨብሳ',290,'Traditional Ethiopian flatbread pieces'],
+['Fetira with Honey / ፈጢራ በማር',290,'Flaky layered pastry with honey'],
+['Fetira with Egg / ፈጢራ በእንቁላል',340,'Flaky layered pastry with egg']]],
+['burger','🍔','Burgers & Fries','በርገር',[
+['Double Burger / ዱብል ስፔሻል በርገር',650,'Double beef patty, Double cheese, Onion, Tomato, Mayonnaise, Egg & Ketchup'],
+['Cheese Burger / ቺዝ በርገር',480,'Beef Patty, Cheese, Mayonnaise, Ketchup, Onion, Tomato & Lettuce'],
+['Beef Burger / ቢፍ በርገር',440,'Beef Patty, Mayonnaise, Ketchup, Onion, Tomato & Lettuce'],
+['Tuna Burger / ቱና በርገር',480,'Tuna, Ketchup, Onion & Tomato'],
+['Fish Burger / ፊሽ በርገር',400,'Fish, Ketchup, Onion, Tomato & Lettuce'],
+['Chicken Burger / ቺክን በርገር',480,'Chicken, Mayonnaise, Ketchup, Onion, Tomato & Lettuce'],
+['Chips / ቺፕስ',260,'French fries']]],
+['pizza','🍕','Pizza','ፒዛ',[
+['Double Pizza / ዱብል ፒዛ',780,'Tomato sauce, Mozzarella Cheese, Beef, Chicken, Egg, Black Olive, Green Pepper, Oregano & Garlic Oil'],
+['Chicken Pizza / ቺክን ፒዛ',680,'Tomato sauce, Mozzarella Cheese, Chicken, Black Olive, Green Pepper, Oregano & Garlic Oil'],
+['Beef Pizza / ቢፍ ፒዛ',580,'Tomato sauce, Mozzarella Cheese, Beef, Onion, Green Pepper & Olive Oil'],
+['AL Tuna Pizza / አል ቱና ፒዛ',550,'Tomato sauce, Tuna, Mozzarella Cheese, Onion, Green Pepper, Oregano & Garlic Oil'],
+['Tuna Fasting Pizza / የጾም ቱና ፒዛ',480,'Tomato sauce, Tuna, Onion, Green Pepper, Oregano & Garlic Oil',1],
+['Pizza Margherita / ፒዛ ማርጋሪታ',470,'Tomato, Cheese & Garlic Oil'],
+['Vegetable Pizza / ቬጅቴብል ፒዛ',390,'Tomato sauce, Vegetables, Black Olive & Garlic Oil',1],
+['Special Fasting Tuna / ስፔሻል የጾም ቱና',510,'Tuna, Vegetables, Onion, Tomato sauce & Green Pepper',1]]],
+['salad','🥗','Salad','ሳላድ',[
+['Mixed Salad / ድብልቅ ሳላድ',320,'Lettuce, Carrot, Tomato, Onion, Green Pepper, Black Olive & Dressing',1],
+['Tuna Salad / ቱና ሳላድ',370,'Tuna, Lettuce, Carrot, Tomato, Onion, Green Pepper, Black Olive'],
+['Fruit Punch / ድብልቅ እጅ ፍሬች',320,'Avocado, Mango, Papaya, Salad',1]]],
+['lunch','🍝','Lunch','ምሳ',[
+['Tibs Firfir / ጥብስ ፍርፍር',450,'Sautéed meat pieces mixed with injera/bread'],
+['Quanta Firfir / ቁቋጣ ፍርፍር',625,'Dried beef pieces mixed with injera/bread'],
+['Spaghetti with Meat / ፓስታ በስጋ',350,'Spaghetti with meat sauce'],
+['Spaghetti with Tomato / ፓስታ በቶማቶ',250,'Spaghetti with tomato sauce',1],
+['Spaghetti Tuna / ፓስታ በቱና',260,'Spaghetti with tuna'],
+['Spaghetti with Veg / ፓስታ በአትክልት',250,'Spaghetti with vegetables',1],
+['Fasting Firfir / የጾም ፍርፍር',260,'Fasting style firfir',1],
+['Tuna Firfir / ቱና ፍርፍር',360,'Tuna mixed firfir'],
+['Fish Goulash / ዓሣ ጉላሽ',600,'Fish goulash'],
+['Fish Cutlet / ዓሣ ኮትሌት',500,'Fried fish cutlet']]],
+['sandwich','🥪','Sandwich','ሳንድዊች',[
+['Club Sandwich / ክለብ ሳንዱዊች',580,'Chicken, Lettuce, Onion, Tomato, Mayonnaise & Provolone Cheese'],
+['Club Sandwich Half / ግማሽ ክለብ ሳንዱዊች',430,'Chicken, Lettuce, Onion, Tomato, Mayonnaise & Provolone Cheese'],
+['Tuna Sandwich / ቱና ሳንዱዊች',420,'Tuna, Onion, Tomato & Green Pepper'],
+['Chicken Sandwich / ዶሮ ሳንዱዊች',470,'Ketchup, Onion, Green Pepper, Mayonnaise, Chicken & Lettuce'],
+['Vegetable Sandwich / አትክልት ሳንዱዊች',300,'Vegetables, Onion, Green Pepper & Ketchup',1],
+['Tuna Club / ቱና ክለብ',530,'Vegetables, Onion, Tuna, Green Pepper & Ketchup'],
+['Vegetable Club / አትክልት ክለብ',350,'Vegetables, Onion, Green Pepper & Ketchup',1],
+['Chicken Wrap / ቺክን ራፕ',560,'Chicken, Lettuce, Onion, Tomato & Ketchup']]],
+['juices','🥤','Juice & Smoothies','ጁስ እና ስሙዚ',[
+['Orange Juice / ብርቱካን',230,'Fresh Orange',1],
+['Mango Juice / ማንጎ',210,'Fresh Mango',1],
+['Mixed Juice / ስፕሪስ',220,'Mixed Fruit Juice',1],
+['Avocado Juice / አቮካዶ',210,'Fresh Avocado',1],
+['Guava Juice / ዘይቱን',210,'Fresh Guava',1],
+['Papaya Juice / ፓፓያ',210,'Fresh Papaya',1],
+['Mango Pineapple Smoothie (Special)',270,'Mango, Pineapple blend'],
+['Strawberry Banana Smoothie',270,'Strawberry, Banana blend'],
+['Strawberry Orange Smoothie',270,'Strawberry, Orange blend'],
+['Chocolate Banana Smoothie',270,'Chocolate, Banana blend'],
+['Strawberry Pineapple Smoothie',270,'Strawberry, Pineapple blend']]],
+['beverages','☕','Drinks & Beverages','ለስላሳ እና ትኩስ ነገር',[
+['Soft Drinks / ለስላሳ',70,'Assorted soft drinks'],
+['Mineral Water / ሚነራል ውኃ',80,'Bottled Mineral Water'],
+['Spring Water ½ L / የውኃ ግማሽ ሊትር',40,'Spring Water 0.5L'],
+['Spring Water 1 L / የውኃ 1 ሊትር',65,'Spring Water 1L'],
+['Spring Water 2 L / የውኃ 2 ሊትር',90,'Spring Water 2L'],
+['Tea / ሻይ',45,'Hot Tea'],
+['Peanut Tea / ለዉዝ ሻይ',110,'Tea with peanut'],
+['Spris Tea / ስፕሪስ ሻይ',65,'Mixed Tea'],
+['Flavoured Tea / ፍሌቨርድ ሻይ',70,'Flavoured Tea'],
+['Milk / ወተት',100,'Warm Milk'],
+['Coffee / ቡና',65,'Traditional Coffee'],
+['Hot Chocolate / ሆት ቸኮሌት',130,'Hot Chocolate'],
+['Ginger Tea / ጂንጀር ሻይ',55,'Ginger Infused Tea'],
+['Macchiato / ማኪያቶ',100,'Coffee Macchiato'],
+['Fasting Macchiato / የጾም ማኪያቶ',100,'Dairy-free Macchiato',1],
+['Special Tea / ስፔሻል ሻይ',160,'Special Spiced Tea']]],
+['extras','➕','Extras','ተጨማሪ',[
+['Burger Takeaway Box',30,'Packaging'],['Pizza Takeaway Box',50,'Packaging'],
+['Cheese',35,'Extra cheese slice'],['Egg',35,'Extra egg'],
+['Mozzarella Cheese',110,'Extra mozzarella'],['Tuna',120,'Extra tuna portion'],
+['Vegetables',50,'Extra vegetables'],['Beef',100,'Extra beef portion'],
+['Chicken',100,'Extra chicken portion'],['Black Olive',80,'Extra olives'],
+['Bread',30,'Extra bread'],['Injera / እንጀራ',20,'Extra injera'],
+['Avocado',35,'Extra avocado'],['Extra Chili',35,'Extra chili'],
+['Extra Mayonnaise',35,'Extra mayonnaise'],['Extra Ketchup',35,'Extra ketchup']]]
+];
+
+const $=s=>document.querySelector(s), menu=$('#menu'), chips=$('#chips'), q=$('#q'), fz=$('#fz'), dlg=$('#dlg');
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function nm(n){const [e,a]=n.split(' / ');return esc(e)+(a?`<span class="am">${esc(a)}</span>`:'')}
+let fast=false;
+
+chips.innerHTML=M.map(c=>`<button class="chip" data-id="${c[0]}">${c[1]} ${c[2]}</button>`).join('');
+chips.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const s=document.getElementById(b.dataset.id);if(s)s.scrollIntoView({behavior:'smooth'})};
+
+function render(){
+  const t=q.value.trim().toLowerCase();let html='',shown=[];
+  M.forEach(c=>{
+    const items=c[4].filter(i=>(!fast||i[3])&&(!t||(i[0]+' '+i[2]).toLowerCase().includes(t)));
+    if(!items.length)return;shown.push(c[0]);
+    html+=`<section id="${c[0]}"><h2>${c[1]} ${c[2]} <span>${c[3]}</span></h2><div class="grid">`+
+    items.map((i,k)=>`<article class="item" style="animation-delay:${k*35}ms"><div class="top"><div class="nm">${nm(i[0])}</div><div class="pr">${i[1]} ETB</div></div><p class="ing">${esc(i[2])}</p>${i[3]?'<span class="fast">🌿 Fasting-friendly</span>':''}</article>`).join('')+`</div></section>`;
+  });
+  menu.innerHTML=html||'<p class="none">😕 Nothing found. Try another word or call us — we may still make it!</p>';
+  [...chips.children].forEach(b=>b.style.display=shown.includes(b.dataset.id)?'':'none');
+  spy();
+}
+q.oninput=render;
+fz.onclick=()=>{fast=!fast;fz.classList.toggle('on',fast);fz.setAttribute('aria-pressed',fast);render()};
+
+function spy(){
+  let cur=null;
+  document.querySelectorAll('section').forEach(s=>{if(s.getBoundingClientRect().top<170)cur=s.id});
+  [...chips.children].forEach(b=>{const on=b.dataset.id===(cur||(menu.querySelector('section')||{}).id);b.classList.toggle('on',on);
+    if(on&&b.offsetParent){const l=b.offsetLeft-chips.clientWidth/2+b.offsetWidth/2;chips.scrollTo({left:l,behavior:'smooth'})}});
+}
+let tick;addEventListener('scroll',()=>{clearTimeout(tick);tick=setTimeout(spy,60)},{passive:true});
+
+function surprise(){
+  const pool=M.filter(c=>!['extras','beverages'].includes(c[0]));
+  const c=pool[Math.random()*pool.length|0], i=c[4][Math.random()*c[4].length|0], [e,a]=i[0].split(' / ');
+  $('#dE').textContent=c[1];$('#dN').textContent=e;$('#dA').textContent=a||'';
+  $('#dI').textContent=i[2];$('#dP').textContent=i[1]+' ETB';
+  if(!dlg.open)dlg.showModal();
+}
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+$('#y').textContent=new Date().getFullYear();
+render();
+</script>
+</body>
+</html>
