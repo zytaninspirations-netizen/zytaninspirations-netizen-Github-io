@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Habit Game — Monthly Tracker</title>
+<style>
+:root{
+  --bg:#e4e5e8; --paper:#f3f3f4; --card:#fafafa; --ink:#202124; --mute:#6b6f76;
+  --line:#c8cacf; --line2:#dcdde1; --accent:#2b2d31; --good:#2e9e5b; --off:#e9eaec;
+  --shadow:0 1px 2px rgba(0,0,0,.08),0 6px 20px rgba(0,0,0,.06);
+}
+[data-theme=dark]{
+  --bg:#111215; --paper:#18191d; --card:#1f2025; --ink:#e8e9ec; --mute:#8d9199;
+  --line:#34363c; --line2:#2a2c31; --accent:#e8e9ec; --good:#3ecf7e; --off:#232429;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:1400px;margin:0 auto;padding:16px}
+.top{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
+@media(min-width:900px){.top{grid-template-columns:1.4fr 1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.quote{padding:20px 24px;position:relative;overflow:hidden}
+.quote q{display:block;font:italic 21px/1.45 Georgia,"Times New Roman",serif;quotes:"\201C" "\201D";transition:opacity .35s}
+.quote .by{margin-top:10px;color:var(--mute);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.quote .qbtn{position:absolute;right:12px;top:10px}
+.fade{opacity:0}
+.head{padding:16px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.head h1{margin:0;font-size:22px;letter-spacing:-.01em}
+.head .sub{color:var(--mute);font-size:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px 11px}
+.btn:hover{border-color:var(--ink)}
+.btn.pri{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.btn.sm{padding:3px 8px;font-size:12px}
+.tabs{display:flex;gap:4px;margin:0 0 12px}
+.tab{padding:7px 14px;border-radius:9px;border:1px solid transparent;background:transparent;color:var(--mute)}
+.tab.on{background:var(--paper);border-color:var(--line);color:var(--ink);font-weight:600}
+.add{padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.add label{display:flex;flex-direction:column;font-size:11px;color:var(--mute);gap:3px}
+.add input,.add select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px;color:var(--ink)}
+.add input[type=color]{padding:0;width:38px;height:32px}
+.add input[type=text]{min-width:170px}
+.add input[type=number]{width:80px}
+.scroll{overflow-x:auto;border-radius:14px}
+table.grid{border-collapse:separate;border-spacing:0;width:100%;min-width:1100px;background:var(--paper)}
+.grid th,.grid td{border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);text-align:center;padding:0}
+.grid thead th{font-weight:500;color:var(--mute);font-size:11px;height:22px}
+.grid .wk{background:var(--card);border-left:2px solid var(--line);font-weight:600;color:var(--ink)}
+.grid .dn{font-size:12px;color:var(--ink)}
+.grid .today{background:color-mix(in srgb,var(--good) 22%,transparent);color:var(--ink);font-weight:700}
+.grid .fl{height:26px;font-size:15px}
+.sticky{position:sticky;left:0;z-index:2;background:var(--paper);text-align:left!important}
+.hn{min-width:200px;max-width:230px;padding:6px 10px!important;border-right:2px solid var(--line)!important}
+.hn .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--hc);margin-right:7px}
+.hn .nm{cursor:pointer;font-weight:600}
+.hn small{display:block;color:var(--mute);font-size:11px;margin-left:16px}
+.hn .x{float:right;border:0;background:none;color:var(--mute);font-size:16px;line-height:1;padding:2px 4px;opacity:.5}
+.hn .x:hover{opacity:1;color:#d33}
+td.c{height:34px;min-width:30px;width:30px}
+.box{width:18px;height:18px;border:1.8px solid var(--mute);border-radius:4px;background:var(--card);display:inline-block;vertical-align:middle;cursor:pointer;transition:transform .08s}
+.box:hover{transform:scale(1.15);border-color:var(--hc)}
+.box.on{background:var(--hc);border-color:var(--hc);position:relative}
+.box.on::after{content:"";position:absolute;left:4.5px;top:1px;width:5px;height:10px;border:solid #fff;border-width:0 2.2px 2.2px 0;transform:rotate(45deg)}
+td.off{background:var(--off)}
+td.off .box{opacity:.25;pointer-events:none}
+td.c input{width:28px;height:24px;text-align:center;border:1px solid var(--line);border-radius:5px;background:var(--card);padding:0;-moz-appearance:textfield}
+td.c input::-webkit-outer-spin-button,td.c input::-webkit-inner-spin-button{-webkit-appearance:none}
+td.c.done input{background:var(--hc);color:#fff;border-color:var(--hc);font-weight:700}
+td.c input:disabled{opacity:.2}
+.st{min-width:52px;font-size:12px;padding:0 6px!important}
+td.st{font-variant-numeric:tabular-nums}
+td.st b{font-size:13px}
+tr.foot td,tr.foot th{background:var(--card);height:30px;font-size:11px;font-weight:600}
+tr.foot .sticky{background:var(--card)}
+.face{font-size:17px}
+.grid tbody tr:hover td:not(.off){background-image:linear-gradient(rgba(128,128,128,.07),rgba(128,128,128,.07))}
+.chartbox{padding:14px 16px;margin-top:14px}
+.chartbox h3,.panel h3{margin:0 0 8px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.legend{font-size:11px;color:var(--mute)}
+.focus{padding:12px 16px;margin-top:14px;display:grid;gap:8px}
+.focus textarea{width:100%;min-height:60px;resize:vertical;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.stat{padding:14px 16px}
+.stat .v{font-size:28px;font-weight:700;letter-spacing:-.02em}
+.stat .l{color:var(--mute);font-size:12px}
+.panel{padding:16px;margin-bottom:14px}
+.hcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.hc{padding:14px;display:flex;gap:12px;align-items:center}
+.ring{width:64px;height:64px;flex:none}
+.hc h4{margin:0 0 2px;font-size:14px}
+.hc .m{color:var(--mute);font-size:12px}
+.mini{display:flex;gap:3px;margin-top:6px}
+.mini i{width:12px;height:12px;border-radius:3px;background:var(--line2);display:block}
+.mini i.on{background:var(--hc)}
+.bars{display:flex;align-items:end;gap:10px;height:120px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%;font-size:11px;color:var(--mute)}
+.bar div{width:100%;max-width:46px;border-radius:6px 6px 0 0;background:var(--accent);opacity:.85;min-height:2px}
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,14px);gap:3px;overflow-x:auto;padding-bottom:4px}
+.heat i{width:14px;height:14px;border-radius:3px;background:var(--line2)}
+.empty{padding:40px;text-align:center;color:var(--mute)}
+.two{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:900px){.two{grid-template-columns:1fr 1fr}}
+.hide{display:none}
+footer{color:var(--mute);font-size:11px;text-align:center;margin:18px 0 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div class="card quote">
+      <button class="btn sm qbtn" data-act="newquote" title="New quote">↻ New quote</button>
+      <q id="qtext"></q>
+      <div class="by">— Fyodor Dostoevsky</div>
+    </div>
+    <div class="card head">
+      <div>
+        <h1 id="mtitle">Month</h1>
+        <div class="sub" id="tsub"></div>
+      </div>
+      <div class="row">
+        <button class="btn" data-act="prev">‹</button>
+        <button class="btn" data-act="todayBtn">Today</button>
+        <button class="btn" data-act="next">›</button>
+        <button class="btn" data-act="theme" title="Light / dark">◐</button>
+      </div>
+    </div>
+  </div>
+
+  <form class="card add" id="addForm">
+    <label>New habit<input type="text" id="hName" placeholder="e.g. Meditate" required maxlength="40"></label>
+    <label>Tracking type
+      <select id="hType">
+        <option value="check">Done / not done</option>
+        <option value="count">Count toward a goal</option>
+      </select>
+    </label>
+    <label class="cnt hide">Daily goal<input type="number" id="hTarget" min="1" value="8"></label>
+    <label class="cnt hide">Unit<input type="text" id="hUnit" placeholder="glasses, pages, min" maxlength="14"></label>
+    <label>Start date<input type="date" id="hStart"></label>
+    <label>Colour<input type="color" id="hColor" value="#2f6fed"></label>
+    <button class="btn pri" type="submit">+ Add habit</button>
+    <span style="flex:1"></span>
+    <button class="btn sm" type="button" data-act="export">Export</button>
+    <button class="btn sm" type="button" data-act="import">Import</button>
+    <button class="btn sm" type="button" data-act="reset">Reset all</button>
+    <input type="file" id="file" accept="application/json" class="hide">
+  </form>
+
+  <div class="tabs">
+    <button class="tab on" data-act="tab" data-tab="grid">Tracker</button>
+    <button class="tab" data-act="tab" data-tab="insights">Insights</button>
+  </div>
+
+  <section id="pGrid">
+    <div class="card scroll" id="gridBox"></div>
+    <div class="card chartbox">
+      <h3>Consistency chart <span class="legend">&nbsp;— solid: daily show-up rate · dashed: 7-day average</span></h3>
+      <div id="chart"></div>
+    </div>
+    <div class="card focus">
+      <h3 style="margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)">Focus for this month</h3>
+      <textarea id="focus" placeholder="What matters most this month? Journal, goals, reminders…"></textarea>
+    </div>
+  </section>
+
+  <section id="pIns" class="hide"></section>
+
+  <footer>Saved automatically in this browser · Check = click the box · Count habits = type the number · Click a habit name to rename it</footer>
+</div>
+
+<script>
+/* ---------------- Quotes (200) ----------------
+   Public-domain author; wording is condensed / varies by translation. */
+const QUOTES = [
+"Pain and suffering are always inevitable for a large intelligence and a deep heart.",
+"The mystery of human existence lies not in just staying alive, but in finding something to live for.",
+"Man is a mystery. If you spend your whole life trying to unravel it, don't say you wasted your time.",
+"To go wrong in one's own way is better than to go right in someone else's.",
+"Taking a new step, uttering a new word, is what people fear most.",
+"Above all, don't lie to yourself.",
+"Beauty will save the world.",
+"The soul is healed by being with children.",
+"Love in action is a harsh and dreadful thing compared with love in dreams.",
+"The darker the night, the brighter the stars; the deeper the grief, the closer is God.",
+"Power is given only to those who dare to stoop and pick it up.",
+"Man only likes to count his troubles; he doesn't count his joys.",
+"Happiness does not lie in happiness, but in the achievement of it.",
+"Much unhappiness has come into the world because of bewilderment and things left unsaid.",
+"Everything is in a man's hands, and he lets it all slip from cowardice.",
+"Without a clear idea of why he lives, a man will not consent to live.",
+"Nothing is easier than to denounce the evildoer; nothing is harder than to understand him.",
+"A man who lies to himself comes to a point where he can no longer tell the truth.",
+"Try to love your neighbour actively and tirelessly.",
+"Life is a gift; every minute may be an age of happiness.",
+"Suffering is the sole origin of consciousness.",
+"Too much consciousness is a disease, a real thoroughgoing disease.",
+"Man is a creature that can get accustomed to anything.",
+"What is hell? The suffering of being unable to love.",
+"Love all God's creation, the whole of it and every grain of sand.",
+"Love every leaf, every ray of light.",
+"Each of us is guilty before all, for all and for everything.",
+"Money is coined liberty.",
+"To live without hope is to cease to live.",
+"There is no sin that love cannot forgive in the truly repentant.",
+"The cleverest man is the one who calls himself a fool at least once a month.",
+"Man is not made for happiness alone; he is made for the effort that earns it.",
+"It takes something more than intelligence to act intelligently.",
+"Real freedom begins with the courage to choose your own burden.",
+"We are all responsible for everything and everyone, and I more than the others.",
+"Take a minute of silence; the truth often speaks in it.",
+"A new life is not given for nothing; it must be paid for with a great future effort.",
+"The greatest happiness is to know the source of unhappiness.",
+"Be bold in your thinking, and gentle in your judgments.",
+"It is not the strongest who endure, but those who refuse to stop moving.",
+"Great deeds are born of small, stubborn steps taken daily.",
+"One must suffer a little to earn the right to be glad.",
+"What matters is not to fall, but to rise each time you do.",
+"People fear freedom more than they fear chains, for freedom demands a decision.",
+"Whoever has a why to live can bear almost any how.",
+"Do not be afraid of your own heart; it knows more than your reasons.",
+"Every man has some reminiscences he would tell only to his friends, and some he would not tell even to them.",
+"The second half of a man's life is made up of nothing but the habits he has acquired during the first half.",
+"The one who loves much will see much that is hidden to the cold.",
+"Don't ask for a lighter burden; ask for a stronger back, and begin.",
+"Time spent in doubt is time stolen from action.",
+"Even in the darkest cell a person can keep one window open: his will.",
+"To be too conscious is an illness; to act is a cure.",
+"Sometimes a single kind word is enough to turn a whole life around.",
+"The more I love humanity in general, the less I love people in particular, and the harder I must learn to love them.",
+"Humility is a terrible force; it is the strongest of all things.",
+"There are moments when a person must simply decide who he will be.",
+"Our dreams are worthless unless we wake up and begin to build them.",
+"Man loves to create and to build roads; that is beyond dispute.",
+"The best of men sometimes fall; the worst of men sometimes rise.",
+"Do not judge the day by the harvest you reap, but by the seeds you plant.",
+"It is not enough to be a good man in secret; show it in small acts every day.",
+"A heart that has once learned to hope is not easily defeated.",
+"Strength is found in patient repetition, not in sudden storms.",
+"The soul gets its rainbow only through the tears.",
+"Even a ruined day can be rescued by one honest hour.",
+"He who has a strong will can transform torment into discipline.",
+"Fear nothing so much as a life that was never truly lived.",
+"We are made to endure far more than we believe, if only we begin.",
+"There is no despair so deep that a step forward cannot shift it.",
+"Freedom is the right to become better than you are.",
+"Do not wait for inspiration; labour calls it.",
+"We carry our worst enemy inside; so we must carry our best friend there too.",
+"One day of honest effort outweighs a year of fine intentions.",
+"Courage is not the absence of doubt but the decision to proceed with it.",
+"A person becomes what he repeats.",
+"Honesty with oneself is the first and hardest discipline.",
+"Great ideas need great patience.",
+"Dreams are the seeds; habits are the soil.",
+"The heart finds its way when the mind has lost the road.",
+"Be kind to yourself on the days you fall; you will need your own strength tomorrow.",
+"Nothing great is accomplished in a hurry, nor without long humbleness.",
+"It is the quiet persistence of ordinary days that builds an extraordinary life.",
+"One needs a great deal of silence to hear what matters.",
+"If you wish to change the world, begin by tidying your own room and your own conscience.",
+"There is a point at which suffering becomes a teacher rather than a tyrant.",
+"Never underestimate the power of a small decision repeated.",
+"The strongest chains are those we forge for ourselves out of excuses.",
+"Every morning is a small resurrection.",
+"A moment of true attention is worth a lifetime of distraction.",
+"Do the work that is in front of you, and the road will explain itself.",
+"What we do each day quietly shapes who we are forever.",
+"Be honest in the little things; the large ones will follow.",
+"The man who fears nothing but wasted time will rarely waste it.",
+"Misfortune is a university in which the diligent learn the most.",
+"Rise again, however many times you stumble; the stumbling is part of the road.",
+"It is better to be a living struggle than a comfortable death.",
+"The point is not to have no weakness, but to refuse to be ruled by it.",
+"All is well if you can still love.",
+"One must have the courage to look at oneself without flattery.",
+"Real tenderness is a kind of strength.",
+"Whoever gives himself to useful work has already begun to be happy.",
+"The future belongs to those who start today, imperfectly.",
+"There is nothing more beautiful than a person who keeps trying.",
+"I would rather be a man of small acts than a man of great speeches.",
+"The greatest courage is to stay on the path when no one is watching.",
+"Patience is bitter, but its fruit is sweet.",
+"We never know how much a single day can change when it is lived with full attention.",
+"Do not give your life to regrets; give it to attempts.",
+"To love is to endure, and to endure is to grow.",
+"A person who is able to laugh at himself will never be fully broken.",
+"The deeper a man looks within, the more he discovers his own capacity for good.",
+"There are depths of the human heart that only perseverance can reach.",
+"Hope is a discipline, practised again every morning.",
+"No effort made in sincerity is ever entirely lost.",
+"Our greatest battles are fought in the quiet of ordinary hours.",
+"Let your conscience be your companion on the long road.",
+"Hurry less, and attend more.",
+"The soul needs a task as the body needs bread.",
+"When you cannot change the circumstance, change the step you take through it.",
+"The important thing is not to stop questioning.",
+"Gratitude turns the little we have into plenty.",
+"What a man can bear is the measure of what he can become.",
+"Do not despise the small beginnings of a long journey.",
+"A single honest act can light an entire street.",
+"We are most alive when we are in the middle of something difficult and meaningful.",
+"There is dignity in daily labour that no riches can buy.",
+"He who has overcome his own laziness has already won half the battle.",
+"Joy is found in the doing, not only in the done.",
+"Perhaps the whole of life is a practice in paying attention.",
+"A man needs a dream, but he needs a daily plan more.",
+"Treat each day as a page, and write it as if someone will read it with love.",
+"In the end, we are what we have patiently chosen to do.",
+"Faith without work is only a mood.",
+"Better a hard truth today than a comfortable lie for years.",
+"Every soul has a hidden room where it decides its own fate.",
+"Do not envy another man's road; you have yet to walk your own.",
+"There is always one more thing you can do for someone, and it is usually kindness.",
+"A person who respects his own time respects his own life.",
+"Sorrow can be a gardener if you let it plant something.",
+"The best remedy for a restless mind is a task well begun.",
+"Even small light is enough to find the way.",
+"It is easy to love humanity in the abstract; practise on the person beside you.",
+"Never allow your failures to define the limit of your next attempt.",
+"To think is easy; to act on what you think is the labour of life.",
+"True strength is quiet and returns every morning.",
+"One keeps one's promises to oneself, or else one becomes a stranger to oneself.",
+"Man's heart is a battlefield where good and evil contend; choose daily which one to feed.",
+"Only through effort do ideals become real.",
+"Mercy is stronger than any judgment.",
+"There are no wasted days for one who learns from them.",
+"The truth is simple, and so it is difficult to bear.",
+"Life is hard, but it is also the only chance we have to be generous.",
+"Begin where you are; the way appears as you walk.",
+"A mind at peace is the reward of a conscience at work.",
+"The habit of attention is the root of every virtue.",
+"The courage to begin again is the whole of wisdom.",
+"We are tested not in the storm but in the long grey afternoon.",
+"Never let yesterday's weakness make a prisoner of today.",
+"Humble work done faithfully is a form of prayer.",
+"Sometimes the bravest thing is to keep a small promise.",
+"The hardest battles are won by those who keep returning to the field.",
+"There is a kind of happiness that only comes after great effort.",
+"Do not wait to be happy; practise it as you would a skill.",
+"A strong character is a habit that has survived many tests.",
+"Keep your inner fire; it is the only one that cannot be taken from you.",
+"The mind is a garden; what you water grows.",
+"Whatever you give attention to, you grow.",
+"To forgive oneself is as difficult as to forgive another, and as necessary.",
+"Be patient with the slow work of becoming.",
+"Even one good day can start a new life if you repeat it.",
+"Peace belongs to those who have done today's duty.",
+"The ones who persist are not stronger; they simply did not quit.",
+"The world is changed by those who show up again.",
+"A life well ordered is a life well loved.",
+"Dare to be tender, dare to be steady.",
+"Discipline is a form of self-respect.",
+"Do not trade your future for a moment's ease.",
+"It is in struggle that the soul learns its own measure.",
+"A kind heart and a steady hand will carry you far.",
+"No dark night lasts beyond the first honest effort at dawn.",
+"If you fall seven times, learn the shape of the ground and rise.",
+"A person is never as lost as when he stops searching.",
+"The greatest freedom is mastery over oneself.",
+"Value the quiet hour; it holds the work no one will applaud.",
+"Look for the good in people, and often you will find it.",
+"Great love grows from small daily kindnesses.",
+"One cannot live by ideas alone; one must act on them.",
+"Never be ashamed to start over.",
+"What you do in the morning decides the shape of your evening.",
+"Choose the difficult kindness over the easy cruelty.",
+"Good habits are small mercies you grant your future self.",
+"There is a deep joy in keeping faith with your own word.",
+"All that is needed is to begin; the rest is persistence.",
+"The heart grows strong by carrying what it must.",
+"Let every day end with a little more honesty than it began.",
+"Today is the only day you can actually change.",
+"Order in small things is the beginning of peace in great ones.",
+"Do not measure the road; take the next step.",
+"A habit kept in secret becomes a character in public.",
+"Whatever is done with love is rarely done in vain."
+];
+
+/* ---------------- Helpers ---------------- */
+const $ = s => document.querySelector(s);
+const pad = n => String(n).padStart(2,'0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s => { const [a,b,c]=s.split('-').map(Number); return new Date(a,b-1,c); };
+const today = () => ymd(new Date());
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DOW = ['S','M','T','W','T','F','S'];
+const DOWL = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const LS = 'habitGame.v1';
+const uid = () => Math.random().toString(36).slice(2,9);
+
+/* ---------------- State ---------------- */
+function fresh(){
+  const first = ymd(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+  const mk = (name,type,target,unit,color)=>({id:uid(),name,type,target,unit,color,start:first});
+  return {
+    theme:'light',
+    habits:[
+      mk('Meditate','check',1,'','#7c5cff'),
+      mk('Workout','check',1,'','#e8590c'),
+      mk('Read','count',20,'pages','#2f6fed'),
+      mk('Drink water','count',8,'glasses','#0ea5a4'),
+      mk('Journal','check',1,'','#c2255c')
+    ],
+    log:{}, focus:{}
+  };
+}
+let S;
+try { S = JSON.parse(localStorage.getItem(LS)); } catch(e){ S = null; }
+if(!S || !Array.isArray(S.habits)) S = fresh();
+S.log = S.log || {}; S.focus = S.focus || {};
+const save = () => { try{ localStorage.setItem(LS, JSON.stringify(S)); }catch(e){} };
+
+let view = { y:new Date().getFullYear(), m:new Date().getMonth() };
+let tab = 'grid';
+
+/* ---------------- Quotes: shuffle-bag, new one every visit ---------------- */
+function nextQuote(){
+  let bag;
+  try { bag = JSON.parse(localStorage.getItem('habitGame.bag')); } catch(e){ bag = null; }
+  if(!Array.isArray(bag) || !bag.length || bag.some(i=>i>=QUOTES.length)){
+    bag = QUOTES.map((_,i)=>i);
+    for(let i=bag.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [bag[i],bag[j]]=[bag[j],bag[i]]; }
+  }
+  const idx = bag.pop();
+  try{ localStorage.setItem('habitGame.bag', JSON.stringify(bag)); }catch(e){}
+  return QUOTES[idx];
+}
+function showQuote(animate){
+  const el = $('#qtext');
+  if(!animate){ el.textContent = nextQuote(); return; }
+  el.classList.add('fade');
+  setTimeout(()=>{ el.textContent = nextQuote(); el.classList.remove('fade'); }, 300);
+}
+
+/* ---------------- Core logic ---------------- */
+const valOf = (h,ds) => (S.log[ds]||{})[h.id] || 0;
+const isDone = (h,ds) => h.type==='count' ? valOf(h,ds) >= h.target : !!valOf(h,ds);
+const active = ds => S.habits.filter(h => h.start <= ds);
+function dayRate(ds){
+  if(ds > today()) return null;
+  const a = active(ds);
+  if(!a.length) return null;
+  return a.filter(h=>isDone(h,ds)).length / a.length;
+}
+function habitStreak(h){
+  const d = parse(today());
+  if(!isDone(h,ymd(d))) d.setDate(d.getDate()-1);
+  let c = 0;
+  for(let i=0;i<2000;i++){
+    const s = ymd(d);
+    if(s < h.start || !isDone(h,s)) break;
+    c++; d.setDate(d.getDate()-1);
+  }
+  return c;
+}
+function habitLongest(h){
+  let best=0, c=0; const d=parse(h.start), e=parse(today());
+  for(; d<=e; d.setDate(d.getDate()+1)){
+    if(isDone(h,ymd(d))){ c++; best=Math.max(best,c); } else c=0;
+  }
+  return best;
+}
+function overallStreak(pred){
+  const d = parse(today());
+  const r0 = dayRate(ymd(d));
+  if(r0===null || !pred(r0)) d.setDate(d.getDate()-1);
+  let c=0;
+  for(let i=0;i<2000;i++){
+    const r = dayRate(ymd(d));
+    if(r===null || !pred(r)) break;
+    c++; d.setDate(d.getDate()-1);
+  }
+  return c;
+}
+const firstStart = () => S.habits.length ? S.habits.map(h=>h.start).sort()[0] : today();
+function heatColor(r){
+  if(r===null) return 'transparent';
+  if(r===0) return 'rgba(220,80,80,.18)';
+  return `hsl(145 ${35+r*40}% ${78-r*38}%)`;
+}
+function flame(r){
+  if(r===null) return '<span style="opacity:.25">▲</span>';
+  if(r>=1) return '🔥';
+  if(r>=.5) return '<span style="color:#e8590c">▲</span>';
+  if(r>0) return '<span style="opacity:.55">▲</span>';
+  return '<span style="opacity:.3">▼</span>';
+}
+function face(r){
+  if(r===null) return '';
+  if(r>=.9) return '😄';
+  if(r>=.7) return '🙂';
+  if(r>=.4) return '😐';
+  if(r>0) return '🙁';
+  return '😞';
+}
+
+/* ---------------- Render: header ---------------- */
+function renderHeader(){
+  $('#mtitle').textContent = `${MONTHS[view.m]} ${view.y}`;
+  const t = today(), a = active(t), done = a.filter(h=>isDone(h,t)).length;
+  $('#tsub').textContent = a.length ? `Today: ${done}/${a.length} habits · ${overallStreak(r=>r>0)}-day active streak` : 'Add your first habit below';
+}
+
+/* ---------------- Render: grid ---------------- */
+function renderGrid(){
+  const {y,m} = view, n = new Date(y,m+1,0).getDate(), t = today();
+  const days = [...Array(n)].map((_,i)=>`${y}-${pad(m+1)}-${pad(i+1)}`);
+  if(!S.habits.length){
+    $('#gridBox').innerHTML = '<div class="empty">No habits yet — add one above.</div>';
+    $('#chart').innerHTML = ''; return;
+  }
+  let h = '<table class="grid"><thead><tr><th class="sticky hn" rowspan="4">Habit</th>';
+  for(let w=0; w*7<n; w++){ h += `<th colspan="${Math.min(7,n-w*7)}" class="wk">Week ${w+1}</th>`; }
+  h += '<th rowspan="4" class="st">Done</th><th rowspan="4" class="st">Rate</th><th rowspan="4" class="st">Streak</th></tr>';
+  h += '<tr>' + days.map(d=>`<th class="${d===t?'today':''}">${DOWL[parse(d).getDay()]}</th>`).join('') + '</tr>';
+  h += '<tr>' + days.map((d,i)=>`<th class="dn ${d===t?'today':''}">${i+1}</th>`).join('') + '</tr>';
+  h += '<tr>' + days.map(d=>`<th class="fl">${flame(dayRate(d))}</th>`).join('') + '</tr></thead><tbody>';
+
+  S.habits.forEach(hb=>{
+    h += `<tr style="--hc:${hb.color}"><td class="sticky hn"><button class="x" data-act="del" data-id="${hb.id}" title="Delete">×</button><span class="dot"></span><b class="nm" data-act="rename" data-id="${hb.id}">${esc(hb.name)}</b><small>${hb.type==='count' ? 'goal '+hb.target+' '+esc(hb.unit||'') : 'daily check'}</small></td>`;
+    let done=0, elig=0;
+    days.forEach(d=>{
+      const off = d>t || d<hb.start, v = valOf(hb,d), dn = isDone(hb,d);
+      if(!off){ elig++; if(dn) done++; }
+      if(hb.type==='count'){
+        h += `<td class="c ${off?'off':''} ${dn?'done':''}"><input type="number" min="0" data-act="count" data-id="${hb.id}" data-d="${d}" value="${v||''}" ${off?'disabled':''}></td>`;
+      } else {
+        h += `<td class="c ${off?'off':''}"><span class="box ${dn?'on':''}" data-act="toggle" data-id="${hb.id}" data-d="${d}"></span></td>`;
+      }
+    });
+    const pct = elig ? Math.round(done/elig*100) : 0;
+    h += `<td class="st"><b>${done}</b>/${elig}</td><td class="st"><b>${pct}%</b></td><td class="st">${habitStreak(hb)}🔥</td></tr>`;
+  });
+  h += '</tbody><tfoot>';
+  h += '<tr class="foot"><th class="sticky hn">Show-up rate</th>' + days.map(d=>{
+    const r = dayRate(d);
+    return `<td style="background:${heatColor(r)}">${r===null?'':Math.round(r*100)+'%'}</td>`;
+  }).join('') + '<td colspan="3"></td></tr>';
+  h += '<tr class="foot"><th class="sticky hn">Mood of the day</th>' + days.map(d=>`<td class="face">${face(dayRate(d))}</td>`).join('') + '<td colspan="3"></td></tr>';
+  h += '</tfoot></table>';
+  $('#gridBox').innerHTML = h;
+  $('#chart').innerHTML = chartSVG(days);
+  $('#focus').value = S.focus[`${y}-${pad(m+1)}`] || '';
+}
+
+function chartSVG(days){
+  const W = 960, H = 210, pl = 38, pr = 14, pt = 12, pb = 26;
+  const step = (W-pl-pr)/Math.max(1,days.length-1);
+  const X = i => pl + i*step, Y = r => pt + (1-r)*(H-pt-pb);
+  const rates = days.map(dayRate);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">`;
+  [0,.25,.5,.75,1].forEach(g=>{
+    s += `<line x1="${pl}" x2="${W-pr}" y1="${Y(g)}" y2="${Y(g)}" stroke="var(--line2)"/><text x="${pl-6}" y="${Y(g)+4}" text-anchor="end" font-size="10" fill="var(--mute)">${g*100}%</text>`;
+  });
+  days.forEach((d,i)=>{ if((i+1)%2===1||days.length<=15) s += `<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="var(--mute)">${i+1}</text>`; });
+  let path=''; rates.forEach((r,i)=>{ if(r!==null) path += (path&&rates[i-1]!==null?'L':'M')+X(i)+' '+Y(r)+' '; });
+  s += `<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2"/>`;
+  let ma=''; rates.forEach((r,i)=>{
+    if(r===null) return;
+    const win = rates.slice(Math.max(0,i-6),i+1).filter(x=>x!==null);
+    const v = win.reduce((a,b)=>a+b,0)/win.length;
+    ma += (ma?'L':'M')+X(i)+' '+Y(v)+' ';
+  });
+  s += `<path d="${ma}" fill="none" stroke="#e8590c" stroke-width="2" stroke-dasharray="5 4"/>`;
+  rates.forEach((r,i)=>{ if(r!==null) s += `<circle cx="${X(i)}" cy="${Y(r)}" r="3.2" fill="var(--paper)" stroke="var(--accent)" stroke-width="1.6"><title>${days[i]} — ${Math.round(r*100)}%</title></circle>`; });
+  return s + '</svg>';
+}
+
+/* ---------------- Render: insights ---------------- */
+function ringSVG(p,color){
+  const r=26, c=2*Math.PI*r, off=c*(1-p);
+  return `<svg class="ring" viewBox="0 0 64 64"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--line2)" stroke-width="7"/><circle cx="32" cy="32" r="${r}" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 32 32)"/><text x="32" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${Math.round(p*100)}%</text></svg>`;
+}
+function renderInsights(){
+  const el = $('#pIns');
+  if(!S.habits.length){ el.innerHTML='<div class="empty card">Add a habit to see insights.</div>'; return; }
+  const {y,m}=view, n=new Date(y,m+1,0).getDate(), t=today();
+  const days=[...Array(n)].map((_,i)=>`${y}-${pad(m+1)}-${pad(i+1)}`);
+  const rated = days.map(dayRate).filter(r=>r!==null);
+  const avg = rated.length ? Math.round(rated.reduce((a,b)=>a+b,0)/rated.length*100) : 0;
+  const perfect = rated.filter(r=>r>=1).length;
+  const bestH = S.habits.map(h=>{
+    let d=0,e=0; days.forEach(x=>{ if(x<=t && x>=h.start){e++; if(isDone(h,x)) d++;} });
+    return {h, p:e?d/e:0, d, e};
+  });
+  const top = bestH.slice().sort((a,b)=>b.p-a.p)[0];
+  let html = `<div class="stats">
+    <div class="card stat"><div class="v">${avg}%</div><div class="l">Average show-up rate (${MONTHS[m]})</div></div>
+    <div class="card stat"><div class="v">${perfect}</div><div class="l">Perfect days this month</div></div>
+    <div class="card stat"><div class="v">${overallStreak(r=>r>=1)} 🔥</div><div class="l">Perfect-day streak</div></div>
+    <div class="card stat"><div class="v">${overallStreak(r=>r>0)}</div><div class="l">Active-day streak</div></div>
+    <div class="card stat"><div class="v" style="font-size:20px;padding-top:6px">${top?esc(top.h.name):'—'}</div><div class="l">Most consistent this month</div></div>
+  </div>`;
+
+  html += '<div class="panel card"><h3>Habits</h3><div class="hcards">';
+  bestH.forEach(({h,p,d,e})=>{
+    const last7 = [...Array(7)].map((_,i)=>{ const x=parse(t); x.setDate(x.getDate()-(6-i)); return isDone(h,ymd(x)); });
+    let totalAll=0; Object.keys(S.log).forEach(k=>{ if(k>=h.start && isDone(h,k)) totalAll++; });
+    html += `<div class="card hc" style="--hc:${h.color}">${ringSVG(p,h.color)}<div><h4>${esc(h.name)}</h4>
+      <div class="m">${d}/${e} days · streak ${habitStreak(h)} · best ${habitLongest(h)}</div>
+      <div class="m">${totalAll} total completions</div>
+      <div class="mini">${last7.map(o=>`<i class="${o?'on':''}"></i>`).join('')}</div></div></div>`;
+  });
+  html += '</div></div>';
+
+  // weekday performance
+  const sums=Array(7).fill(0), cnt=Array(7).fill(0);
+  for(const d=parse(firstStart()), e=parse(t); d<=e; d.setDate(d.getDate()+1)){
+    const r=dayRate(ymd(d)); if(r!==null){ sums[d.getDay()]+=r; cnt[d.getDay()]++; }
+  }
+  const wd = sums.map((s,i)=>cnt[i]?s/cnt[i]:0);
+  // weekly blocks
+  const wk=[]; for(let w=0; w*7<n; w++){
+    const rs=days.slice(w*7,w*7+7).map(dayRate).filter(r=>r!==null);
+    wk.push(rs.length?rs.reduce((a,b)=>a+b,0)/rs.length:null);
+  }
+  html += `<div class="two"><div class="panel card"><h3>Best weekdays (all time)</h3><div class="bars">${wd.map((v,i)=>`<div class="bar"><span>${Math.round(v*100)}%</span><div style="height:${Math.max(2,v*90)}%"></div><span>${DOWL[i]}</span></div>`).join('')}</div></div>
+  <div class="panel card"><h3>Weeks in ${MONTHS[m]}</h3><div class="bars">${wk.map((v,i)=>`<div class="bar"><span>${v===null?'–':Math.round(v*100)+'%'}</span><div style="height:${v===null?2:Math.max(2,v*90)}%;${v===null?'opacity:.2':''}"></div><span>Wk ${i+1}</span></div>`).join('')}</div></div></div>`;
+
+  // heatmap last 26 weeks
+  const cells=[]; const end=parse(t); const start=new Date(end); start.setDate(start.getDate()-(26*7-1)-end.getDay()+6);
+  const st = new Date(end); st.setDate(st.getDate()-end.getDay()-25*7);
+  for(const d=new Date(st); d<=end; d.setDate(d.getDate()+1)){
+    const ds=ymd(d), r=dayRate(ds);
+    cells.push(`<i title="${ds}${r===null?'':' — '+Math.round(r*100)+'%'}" style="${r!==null?'background:'+heatColor(r):''}"></i>`);
+  }
+  html += `<div class="panel card"><h3>Last 26 weeks</h3><div class="heat">${cells.join('')}</div></div>`;
+  el.innerHTML = html;
+}
+
+function render(){
+  renderHeader();
+  $('#pGrid').classList.toggle('hide', tab!=='grid');
+  $('#pIns').classList.toggle('hide', tab!=='insights');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on', b.dataset.tab===tab));
+  if(tab==='grid') renderGrid(); else renderInsights();
+}
+
+/* ---------------- Events ---------------- */
+document.addEventListener('click', e=>{
+  const el = e.target.closest('[data-act]'); if(!el) return;
+  const act = el.dataset.act, id = el.dataset.id;
+  const hb = S.habits.find(x=>x.id===id);
+  if(act==='toggle'){
+    const d=el.dataset.d; S.log[d]=S.log[d]||{};
+    if(S.log[d][id]) delete S.log[d][id]; else S.log[d][id]=1;
+    save(); render();
+  } else if(act==='rename' && hb){
+    const v = prompt('Rename habit', hb.name);
+    if(v && v.trim()){ hb.name=v.trim().slice(0,40); save(); render(); }
+  } else if(act==='del' && hb){
+    if(confirm(`Delete "${hb.name}" and its history?`)){
+      S.habits = S.habits.filter(x=>x.id!==id);
+      Object.values(S.log).forEach(o=>delete o[id]);
+      save(); render();
+    }
+  } else if(act==='prev'){ view.m--; if(view.m<0){view.m=11;view.y--;} render(); }
+  else if(act==='next'){ view.m++; if(view.m>11){view.m=0;view.y++;} render(); }
+  else if(act==='todayBtn'){ const n=new Date(); view={y:n.getFullYear(),m:n.getMonth()}; render(); }
+  else if(act==='tab'){ tab=el.dataset.tab; render(); }
+  else if(act==='newquote'){ showQuote(true); }
+  else if(act==='theme'){ S.theme = S.theme==='dark'?'light':'dark'; document.documentElement.dataset.theme=S.theme; save(); }
+  else if(act==='export'){
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:'application/json'}));
+    a.download=`habit-tracker-${today()}.json`; a.click();
+  } else if(act==='import'){ $('#file').click(); }
+  else if(act==='reset'){
+    if(confirm('Erase all habits and history? This cannot be undone.')){ S=fresh(); save(); render(); }
+  }
+});
+document.addEventListener('change', e=>{
+  const el=e.target;
+  if(el.dataset && el.dataset.act==='count'){
+    const d=el.dataset.d, id=el.dataset.id, v=Math.max(0, parseFloat(el.value)||0);
+    S.log[d]=S.log[d]||{};
+    if(v) S.log[d][id]=v; else delete S.log[d][id];
+    save(); render();
+  }
+});
+$('#file').addEventListener('change', e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{
+    const o=JSON.parse(r.result);
+    if(!Array.isArray(o.habits)) throw 0;
+    S=o; S.log=S.log||{}; S.focus=S.focus||{}; save(); document.documentElement.dataset.theme=S.theme||'light'; render();
+  }catch(_){ alert('That file is not a valid tracker export.'); } };
+  r.readAsText(f); e.target.value='';
+});
+$('#focus').addEventListener('input', e=>{ S.focus[`${view.y}-${pad(view.m+1)}`]=e.target.value; save(); });
+$('#hType').addEventListener('change', e=>{
+  document.querySelectorAll('.cnt').forEach(x=>x.classList.toggle('hide', e.target.value!=='count'));
+});
+$('#addForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const name=$('#hName').value.trim(); if(!name) return;
+  const type=$('#hType').value;
+  S.habits.push({
+    id:uid(), name, type,
+    target: type==='count' ? Math.max(1, parseFloat($('#hTarget').value)||1) : 1,
+    unit: type==='count' ? $('#hUnit').value.trim() : '',
+    color: $('#hColor').value,
+    start: $('#hStart').value || ymd(new Date(view.y, view.m, 1))
+  });
+  $('#hName').value=''; save(); render();
+});
+
+/* ---------------- Init ---------------- */
+document.documentElement.dataset.theme = S.theme || 'light';
+$('#hStart').value = ymd(new Date(view.y, view.m, 1));
+showQuote(false);
+render();
+</script>
+</body>
+</html>
