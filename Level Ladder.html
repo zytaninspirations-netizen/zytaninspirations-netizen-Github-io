@@ -1,0 +1,528 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Level Ladder</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one narrow column that reads top to bottom like the ladder itself.
+   Balance first, the level in play second (the only filled panel), then chart, full ladder, log. */
+:root{
+  --bg:#ECEFF3;
+  --surface:#FFFFFF;
+  --surface-2:#E2E8EE;
+  --ink:#0E1A25;
+  --muted:#586979;
+  --line:#CFD7DF;
+  --accent:#1D4ED8;
+  --accent-ink:#FFFFFF;
+  --win:#0F7A57;
+  --loss:#C0392B;
+  --font-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --font-body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1219;--surface:#121B24;--surface-2:#1A2632;--ink:#E7EEF4;--muted:#8DA0B1;--line:#25333F;
+    --accent:#7C9BFF;--accent-ink:#0B1219;--win:#3FCB98;--loss:#FF7C6F;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1219;--surface:#121B24;--surface-2:#1A2632;--ink:#E7EEF4;--muted:#8DA0B1;--line:#25333F;
+  --accent:#7C9BFF;--accent-ink:#0B1219;--win:#3FCB98;--loss:#FF7C6F;color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:28px 56px;
+}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+.mono,.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* hero */
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.top h1{font-size:15px;font-weight:700;letter-spacing:.02em}
+.sync{font-size:12px;color:var(--muted)}
+.hero{display:flex;flex-direction:column;gap:18px;margin-top:-20px}
+.bal-row{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.bal{font-family:var(--font-display);font-weight:800;font-size:clamp(2.7rem,11vw,4.8rem);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.bal-label{margin-bottom:8px;display:block}
+.goal{text-align:right;font-size:13px;color:var(--muted);line-height:1.6}
+.goal b{color:var(--ink);font-weight:600}
+.segs{display:flex;gap:3px}
+.segs i{flex:1;height:12px;border-radius:2px;background:var(--surface-2);position:relative}
+.segs i.done{background:var(--accent)}
+.segs i.now{background:var(--surface);box-shadow:inset 0 0 0 2px var(--accent)}
+.seg-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:4px 0 0;padding-top:16px;border-top:1px solid var(--line)}
+.stats div{min-width:0}
+.stats dt{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.stats dd{margin:2px 0 0;font-family:var(--font-mono);font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* current level */
+.panel{background:var(--surface);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:20px;border:1px solid var(--line)}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.panel-head h2{font-size:28px;font-weight:800}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink)}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:16px 20px;margin:0}
+.fields dt{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.fields dd{margin:2px 0 0;font-family:var(--font-mono);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
+.fields .risk dd{color:var(--loss)}
+.fields .tp dd{color:var(--win)}
+.fields small{display:block;font-family:var(--font-body);font-size:12px;color:var(--muted);font-weight:400;margin-top:1px}
+form{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--line);padding-top:18px}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;color:var(--muted);min-width:0}
+input[type=number],input[type=text],select{
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:16px;color:var(--ink);width:100%;min-width:0
+}
+input[type=number]{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.seg-ctl{display:flex;border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px;background:var(--bg);border-style:solid;margin:0;min-width:0}
+.seg-ctl label{flex:1;position:relative}
+.seg-ctl input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.seg-ctl span{display:block;text-align:center;padding:9px 10px;border-radius:7px;font-weight:600;font-size:14px;color:var(--muted)}
+.seg-ctl input:checked + span{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.seg-ctl input[value=win]:checked + span{color:var(--win)}
+.seg-ctl input[value=loss]:checked + span{color:var(--loss)}
+.seg-ctl input:focus-visible + span{outline:2px solid var(--accent);outline-offset:1px}
+.form-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.preview{font-size:13px;color:var(--muted);min-width:0}
+.preview b{color:var(--ink);font-family:var(--font-mono);font-weight:600}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:11px 20px;font-weight:600;font-size:15px;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);padding:7px 12px;font-size:13px}
+.btn.danger{background:var(--loss);color:#fff}
+.note-ro{font-size:13px;color:var(--muted)}
+.done-msg{font-family:var(--font-display);font-size:22px;font-weight:700}
+.status{min-height:20px;font-size:13px;color:var(--muted)}
+
+/* sections */
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sec-head h2{font-size:22px;font-weight:700}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:18px;height:0;border-top:2px solid var(--accent);vertical-align:middle;margin-right:6px}
+.legend .plan::before{border-top:2px dashed var(--muted)}
+.chart{width:100%;height:auto;display:block}
+.chart text{font-family:var(--font-mono);font-size:11px;fill:var(--muted)}
+.chart .grid{stroke:var(--line);stroke-width:1;fill:none}
+.chart .plan{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:5 4;fill:none}
+.chart .act{stroke:var(--accent);stroke-width:2.5;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.chart .dot{fill:var(--accent)}
+.chart .ring{fill:var(--bg);stroke:var(--accent);stroke-width:3}
+.chart .endlbl{fill:var(--ink);font-weight:600}
+
+.tablewrap{overflow-x:auto;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line);font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;padding-left:6px}
+td.lvl{font-weight:600}
+td.guide{font-family:var(--font-body);color:var(--muted);font-size:12.5px}
+td.rk{color:var(--loss)}
+td.tp{color:var(--win)}
+td.st{font-family:var(--font-body);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+tr.cleared td{color:var(--muted)}
+tr.cleared td.lvl{color:var(--ink)}
+tr.cleared td.st{color:var(--win)}
+tr.now{background:color-mix(in srgb,var(--accent) 12%,var(--bg))}
+tr.now td.st{color:var(--accent)}
+tr.now td{font-weight:600}
+@media (max-width:560px){.hide-sm{display:none}}
+
+.log{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.log li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.log .when{font-size:12px;color:var(--muted)}
+.log .what{font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.log .tag{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:4px}
+.log .tag.win{color:var(--win);background:color-mix(in srgb,var(--win) 14%,var(--surface))}
+.log .tag.loss{color:var(--loss);background:color-mix(in srgb,var(--loss) 14%,var(--surface))}
+.log .tag.flat{color:var(--muted);background:var(--surface-2)}
+.log .memo{grid-column:1;color:var(--muted);font-size:13.5px;overflow-wrap:anywhere}
+.log .amt{grid-column:2;grid-row:1 / span 2;text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-weight:600}
+.log .amt small{display:block;font-size:12.5px;font-weight:600}
+.log .amt .w{color:var(--win)}.log .amt .l{color:var(--loss)}
+.empty{padding:22px 0;color:var(--muted);border-top:1px solid var(--line);max-width:52ch}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}
+.foot .acts{display:flex;gap:8px;align-items:center}
+@media (prefers-reduced-motion:no-preference){.segs i{transition:background .3s}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>LEVEL LADDER</h1>
+    <span class="sync" id="sync" role="status">Loading…</span>
+  </header>
+
+  <section class="hero" aria-label="Progress">
+    <div class="bal-row">
+      <div>
+        <span class="eyebrow bal-label">Current balance</span>
+        <div class="bal" id="bal">$20.00</div>
+      </div>
+      <div class="goal" id="goal"></div>
+    </div>
+    <div>
+      <div class="segs" id="segs" role="img" aria-label="Level progress"></div>
+      <div class="seg-meta"><span>Level 1</span><span id="segLbl"></span><span>Level 20</span></div>
+    </div>
+    <dl class="stats" id="stats"></dl>
+  </section>
+
+  <section class="panel" aria-labelledby="curH">
+    <div class="panel-head">
+      <h2 id="curH">Level 1</h2>
+      <span class="chip" id="guideChip"></span>
+    </div>
+    <dl class="fields" id="fields"></dl>
+    <form id="form" autocomplete="off">
+      <fieldset class="seg-ctl" id="outcome">
+        <legend class="sr">Trade result</legend>
+        <label><input type="radio" name="out" value="win" checked><span>Hit target</span></label>
+        <label><input type="radio" name="out" value="loss"><span>Stopped out</span></label>
+      </fieldset>
+      <div class="form-row">
+        <label class="f" for="endBal">Balance after trade ($)
+          <input type="number" id="endBal" step="0.01" min="0" inputmode="decimal">
+        </label>
+        <label class="f" for="nextLvl">Move to
+          <select id="nextLvl"></select>
+        </label>
+      </div>
+      <label class="f" for="memo">Note (optional)
+        <input type="text" id="memo" maxlength="200" placeholder="Pair, setup, what you learned">
+      </label>
+      <div class="form-foot">
+        <div class="preview" id="preview"></div>
+        <button class="btn" type="submit" id="logBtn">Log result</button>
+      </div>
+    </form>
+    <div id="doneMsg" hidden></div>
+    <div class="status" id="status" role="status"></div>
+  </section>
+
+  <section aria-labelledby="chH">
+    <div class="sec-head">
+      <h2 id="chH">Plan vs. actual</h2>
+      <div class="legend"><span class="plan">Plan</span><span>Actual</span></div>
+    </div>
+    <div id="chart"></div>
+  </section>
+
+  <section aria-labelledby="ldH">
+    <div class="sec-head"><h2 id="ldH">The ladder</h2><span class="eyebrow">20 levels</span></div>
+    <div class="tablewrap" id="ladder"></div>
+  </section>
+
+  <section aria-labelledby="lgH">
+    <div class="sec-head">
+      <h2 id="lgH">Results log</h2>
+      <button class="btn ghost" id="undo" type="button">Undo last</button>
+    </div>
+    <div id="log"></div>
+  </section>
+
+  <footer class="foot">
+    <span>Plan values are copied from your sheet.</span>
+    <span class="acts" id="resetBox"><button class="btn ghost" id="reset" type="button">Reset tracker</button></span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var START = 20, GOAL = 3732, LS = "level-ladder-v1";
+  var RAW = [
+    [1,20,6,26,4.5,"All"],[2,26,8,34,6,"20–25%"],[3,34,10,44,8,""],[4,44,14,58,10,"TP target anytime"],
+    [5,53,18,76,14,""],[6,53,18,98,13,""],[7,76,22,98,13,""],[8,98,38,126,24,""],[9,126,88,212,28,""],
+    [10,212,64,276,38,""],[11,276,80,356,64,"30–35%"],[12,356,108,464,82,"30–35%"],[13,464,140,604,103,"30–35%"],
+    [14,604,182,786,140,"30–35%"],[15,786,236,1022,182,"30–35%"],[16,1022,303,1325,236,"30–35%"],
+    [17,1325,400,1725,303,"30–35%"],[18,1725,520,2245,400,"30–35%"],[19,2245,674,2919,520,"30–35%"],
+    [20,2919,813,3732,674,"30–35%"]
+  ];
+  var PLAN = RAW.map(function(r){return {lvl:r[0],bal:r[1],tp:r[2],end:r[3],risk:r[4],guide:r[5]};});
+
+  var $ = function(id){return document.getElementById(id);};
+  var state = {entries:[]};
+  var ref = null, readOnly = false, queue = Promise.resolve(), formKey = "";
+
+  function money(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+  function signed(n){return (n>=0?"+":"−")+money(Math.abs(n));}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function r2(n){return Math.round(n*100)/100;}
+
+  function derive(){
+    var e = state.entries, last = e[e.length-1];
+    return {bal: last ? last.after : START, level: last ? last.to : 1};
+  }
+  function fitLevel(b){
+    if(b >= GOAL) return 21;
+    var L = 1;
+    for(var i=0;i<PLAN.length;i++){ if(PLAN[i].bal <= b) L = PLAN[i].lvl; }
+    return L;
+  }
+  function normalize(data){
+    var out = {entries:[]};
+    if(data && Array.isArray(data.entries)){
+      data.entries.forEach(function(x){
+        if(x && isFinite(x.after) && isFinite(x.before) && isFinite(x.to) && isFinite(x.from)){
+          out.entries.push({id:String(x.id||""),t:String(x.t||""),from:+x.from,to:+x.to,before:+x.before,after:+x.after,
+            type:x.type==="win"||x.type==="loss"?x.type:"flat",note:String(x.note||"").slice(0,200)});
+        }
+      });
+    }
+    return out;
+  }
+
+  /* ---------- persistence ---------- */
+  function setSync(t){ $("sync").textContent = t; }
+  function persist(){
+    var body = {v:1, entries:state.entries};
+    if(ref){
+      queue = queue.then(function(){return ref.set(body);}).catch(function(e){
+        if(e && e.code === "invalid_argument"){ readOnly = true; render(); }
+        else { flash("Could not save that change. Check your connection and try again."); }
+      });
+    } else {
+      try{ localStorage.setItem(LS, JSON.stringify(body)); }catch(e){}
+    }
+  }
+  function flash(t){ $("status").textContent = t; }
+
+  /* ---------- render ---------- */
+  function render(){
+    var d = derive(), plan = PLAN[d.level-1] || null, n = state.entries.length;
+
+    $("bal").textContent = money(d.bal);
+    var left = GOAL - d.bal;
+    $("goal").innerHTML = d.bal >= GOAL
+      ? "<b>Goal reached</b><br>" + money(GOAL)
+      : "Goal <b>" + money(GOAL) + "</b><br>" + money(left) + " to go · " + (GOAL/Math.max(d.bal,1)).toFixed(1) + "× left";
+
+    var segs = "";
+    for(var i=1;i<=20;i++){ segs += '<i class="'+(i<d.level?"done":i===d.level?"now":"")+'"></i>'; }
+    $("segs").innerHTML = segs;
+    $("segs").setAttribute("aria-label", d.level>20 ? "All 20 levels cleared" : (d.level-1)+" of 20 levels cleared, now on level "+d.level);
+    $("segLbl").textContent = d.level>20 ? "Complete" : (d.level-1)+" of 20 cleared";
+
+    var wins = 0, losses = 0, peak = START;
+    state.entries.forEach(function(e){ if(e.type==="win")wins++; else if(e.type==="loss")losses++; if(e.after>peak)peak=e.after; });
+    var streak = "—";
+    if(n){
+      var t = state.entries[n-1].type, c = 0;
+      for(var k=n-1;k>=0 && state.entries[k].type===t;k--) c++;
+      streak = t==="flat" ? "—" : c+(t==="win"?" W":" L");
+    }
+    var rate = (wins+losses) ? Math.round(wins/(wins+losses)*100)+"%" : "—";
+    $("stats").innerHTML =
+      '<div><dt>Growth</dt><dd>'+(d.bal/START).toFixed(2)+'×</dd></div>'+
+      '<div><dt>Win rate</dt><dd>'+rate+'</dd></div>'+
+      '<div><dt>Streak</dt><dd>'+streak+'</dd></div>'+
+      '<div><dt>Peak</dt><dd>'+money(peak)+'</dd></div>';
+
+    var form = $("form");
+    if(plan){
+      $("curH").textContent = "Level " + plan.lvl;
+      $("guideChip").textContent = plan.guide ? "Risk guide: " + plan.guide : "No risk guide for this level";
+      var pct = Math.round(plan.risk / plan.bal * 1000)/10;
+      $("fields").innerHTML =
+        '<div><dt>Plan balance</dt><dd>'+money(plan.bal)+'</dd></div>'+
+        '<div class="tp"><dt>Profit target</dt><dd>'+money(plan.tp)+'</dd></div>'+
+        '<div><dt>Ending balance</dt><dd>'+money(plan.end)+'</dd></div>'+
+        '<div class="risk"><dt>Risk</dt><dd>'+money(plan.risk)+'<small>'+pct+'% of plan balance</small></dd></div>';
+      form.hidden = false; $("doneMsg").hidden = true;
+      var key = d.level+"|"+d.bal+"|"+n;
+      if(key !== formKey){ formKey = key; resetForm(); }
+      var dis = readOnly;
+      Array.prototype.forEach.call(form.elements, function(el){ el.disabled = dis; });
+      if(dis) $("preview").textContent = "You can view this tracker but not change it.";
+    } else {
+      $("curH").textContent = "Ladder complete";
+      $("guideChip").textContent = "";
+      $("fields").innerHTML = "";
+      form.hidden = true;
+      $("doneMsg").hidden = false;
+      $("doneMsg").innerHTML = '<div class="done-msg">All 20 levels cleared. Final balance '+money(d.bal)+'.</div>';
+    }
+
+    drawChart(d);
+    drawLadder(d);
+    drawLog();
+    $("undo").disabled = readOnly || n === 0;
+    if($("reset")) $("reset").disabled = readOnly || n === 0;
+  }
+
+  function resetForm(){
+    var d = derive(), plan = PLAN[d.level-1];
+    if(!plan) return;
+    var sel = $("nextLvl"), h = "";
+    for(var i=1;i<=20;i++) h += '<option value="'+i+'">Level '+i+'</option>';
+    h += '<option value="21">Complete</option>';
+    sel.innerHTML = h;
+    document.querySelector('input[name=out][value=win]').checked = true;
+    applyOutcome();
+    $("memo").value = "";
+  }
+  function applyOutcome(){
+    var d = derive(), plan = PLAN[d.level-1];
+    if(!plan) return;
+    var win = document.querySelector('input[name=out]:checked').value === "win";
+    if(win){
+      $("endBal").value = plan.end.toFixed(2);
+      $("nextLvl").value = String(Math.min(21, d.level+1));
+    } else {
+      var after = Math.max(0, r2(d.bal - plan.risk));
+      $("endBal").value = after.toFixed(2);
+      $("nextLvl").value = String(Math.max(1, fitLevel(after)));
+    }
+    updatePreview();
+  }
+  function updatePreview(){
+    var d = derive(), v = parseFloat($("endBal").value);
+    if(!isFinite(v)){ $("preview").textContent = "Enter the balance after the trade."; return; }
+    var to = +$("nextLvl").value, diff = r2(v - d.bal);
+    $("preview").innerHTML = "<b>"+signed(diff)+"</b> · Level "+d.level+" → " + (to>20 ? "complete" : "Level "+to);
+  }
+
+  /* ---------- chart ---------- */
+  function drawChart(d){
+    var W = 640, H = 290, L = 56, R = 18, T = 16, B = 32;
+    var pw = W-L-R, ph = H-T-B, lo = Math.log10(10), hi = Math.log10(5000);
+    function X(i){ return L + pw * i / 20; }
+    function Y(v){ var c = Math.min(5000, Math.max(10, v)); return T + ph * (1 - (Math.log10(c)-lo)/(hi-lo)); }
+    var s = '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Planned balance by level compared with logged balance">';
+    [10,50,100,500,1000,5000].forEach(function(v){
+      s += '<line class="grid" x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/>';
+      s += '<text x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">$'+v.toLocaleString("en-US")+'</text>';
+    });
+    [[0,"L1"],[4,"L5"],[9,"L10"],[14,"L15"],[19,"L20"]].forEach(function(t){
+      s += '<text x="'+X(t[0])+'" y="'+(H-10)+'" text-anchor="middle">'+t[1]+'</text>';
+    });
+    var plan = PLAN.map(function(p){return p.bal;}).concat([GOAL]);
+    s += '<polyline class="plan" points="'+plan.map(function(v,i){return X(i).toFixed(1)+","+Y(v).toFixed(1);}).join(" ")+'"/>';
+    s += '<text class="endlbl" x="'+(X(20)-8)+'" y="'+(Y(GOAL)+4)+'" text-anchor="end">'+money(GOAL).replace(".00","")+'</text>';
+    var pts = [[0,START]];
+    state.entries.forEach(function(e){ pts.push([Math.min(20,e.to-1), e.after]); });
+    var coords = pts.map(function(p){return X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1);});
+    if(pts.length > 1) s += '<polyline class="act" points="'+coords.join(" ")+'"/>';
+    pts.slice(0,-1).forEach(function(p){ s += '<circle class="dot" r="3.5" cx="'+X(p[0]).toFixed(1)+'" cy="'+Y(p[1]).toFixed(1)+'"/>'; });
+    var lp = pts[pts.length-1];
+    s += '<circle class="ring" r="5.5" cx="'+X(lp[0]).toFixed(1)+'" cy="'+Y(lp[1]).toFixed(1)+'"/>';
+    s += '</svg>';
+    $("chart").innerHTML = s;
+  }
+
+  /* ---------- ladder table ---------- */
+  function drawLadder(d){
+    var h = '<table><thead><tr><th>Level</th><th>Balance</th><th>Target</th><th class="hide-sm">Ending</th><th>Risk</th><th class="hide-sm">Risk guide</th><th></th></tr></thead><tbody>';
+    PLAN.forEach(function(p){
+      var cls = p.lvl < d.level ? "cleared" : p.lvl === d.level ? "now" : "";
+      var st = p.lvl < d.level ? "Done" : p.lvl === d.level ? "Now" : "";
+      h += '<tr class="'+cls+'"'+(cls==="now"?' aria-current="true"':'')+'><td class="lvl">'+p.lvl+'</td><td>'+money(p.bal)+'</td><td class="tp">'+money(p.tp)+
+        '</td><td class="hide-sm">'+money(p.end)+'</td><td class="rk">'+money(p.risk)+'</td><td class="guide hide-sm">'+esc(p.guide||"—")+'</td><td class="st">'+st+'</td></tr>';
+    });
+    $("ladder").innerHTML = h + '</tbody></table>';
+  }
+
+  /* ---------- log ---------- */
+  function drawLog(){
+    var e = state.entries;
+    if(!e.length){
+      var p = PLAN[0];
+      $("log").innerHTML = '<p class="empty">No results yet. Your first target is '+money(p.tp)+' on '+money(p.bal)+', with '+money(p.risk)+' at risk. Log it above when the trade closes.</p>';
+      return;
+    }
+    var h = '<ul class="log">';
+    e.slice().reverse().forEach(function(x){
+      var diff = r2(x.after - x.before);
+      var when = "";
+      try{ when = new Date(x.t).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}) + " · " + new Date(x.t).toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"}); }catch(_){}
+      var lbl = x.type==="win"?"Win":x.type==="loss"?"Loss":"Flat";
+      h += '<li><div class="what"><span class="tag '+x.type+'">'+lbl+'</span><span>Level '+x.from+' → '+(x.to>20?"complete":x.to)+'</span></div>'+
+        '<div class="amt">'+money(x.after)+'<small class="'+(diff>0?"w":diff<0?"l":"")+'">'+signed(diff)+'</small></div>'+
+        '<div class="memo"><span class="when">'+esc(when)+'</span>'+(x.note?'<br>'+esc(x.note):'')+'</div></li>';
+    });
+    $("log").innerHTML = h + '</ul>';
+  }
+
+  /* ---------- events ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll("input[name=out]"), function(r){ r.addEventListener("change", applyOutcome); });
+  $("endBal").addEventListener("input", function(){
+    var v = parseFloat($("endBal").value);
+    if(isFinite(v)) $("nextLvl").value = String(Math.max(1, fitLevel(v)));
+    updatePreview();
+  });
+  $("nextLvl").addEventListener("change", updatePreview);
+
+  $("form").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    if(readOnly) return;
+    var d = derive(), after = parseFloat($("endBal").value);
+    if(!isFinite(after) || after < 0){ flash("Enter the balance after the trade, $0 or more."); $("endBal").focus(); return; }
+    after = r2(after);
+    var type = after > d.bal ? "win" : after < d.bal ? "loss" : "flat";
+    state.entries.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+      t: new Date().toISOString(), from: d.level, to: +$("nextLvl").value,
+      before: d.bal, after: after, type: type, note: $("memo").value.trim().slice(0,200)
+    });
+    persist();
+    flash(type==="win" ? "Win logged. Balance is now "+money(after)+"." : type==="loss" ? "Loss logged. Balance is now "+money(after)+"." : "Flat result logged.");
+    render();
+  });
+
+  $("undo").addEventListener("click", function(){
+    if(readOnly || !state.entries.length) return;
+    state.entries.pop(); persist(); flash("Last result removed."); render();
+  });
+
+  function restoreReset(){
+    $("resetBox").innerHTML = '<button class="btn ghost" id="reset" type="button"'+((readOnly||!state.entries.length)?' disabled':'')+'>Reset tracker</button>';
+  }
+  $("resetBox").addEventListener("click", function(ev){
+    var id = ev.target && ev.target.id;
+    if(id === "reset"){
+      if(readOnly || !state.entries.length) return;
+      $("resetBox").innerHTML = '<span>Erase all '+state.entries.length+' results?</span><button class="btn danger" id="rYes" type="button" style="padding:7px 12px;font-size:13px">Erase</button><button class="btn ghost" id="rNo" type="button">Keep</button>';
+      $("rNo").focus();
+    } else if(id === "rNo"){
+      restoreReset();
+    } else if(id === "rYes"){
+      state.entries = []; persist(); restoreReset(); flash("Tracker reset to Level 1."); render();
+    }
+  });
+
+  /* ---------- boot ---------- */
+  try{
+    var saved = localStorage.getItem(LS);
+    if(saved) state = normalize(JSON.parse(saved));
+  }catch(e){}
+  render();
+
+  (async function(){
+    var use = window.claude && window.claude.use ? window.claude.use.bind(window.claude) : null;
+    var db = null, user = null;
+    if(use){ try{ db = await use("db"); user = await use("user"); }catch(e){} }
+    if(!db){ setSync("Saved in this browser only"); return; }
+    try{
+      if(user && user.can && user.can("data.write") === false) readOnly = true;
+      ref = db.doc("tracker/state");
+      ref.onSnapshot(function(snap){
+        state = normalize(snap.exists ? snap.data() : {});
+        setSync(readOnly ? "View only" : "Synced");
+        formKey = ""; render();
+      }, function(){ setSync("Offline, showing last saved data"); });
+    }catch(e){ ref = null; setSync("Saved in this browser only"); }
+  })();
+})();
+</script>
+
+</body></html>
