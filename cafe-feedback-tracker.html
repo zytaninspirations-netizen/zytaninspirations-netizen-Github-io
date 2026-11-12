@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:#f58a1f; --orange-d:#d96f08; --orange-l:#fff1e0;
+    --ink:#1f1a17; --muted:#6f655e; --bg:#fffaf4; --card:#ffffff;
+    --red:#d64545; --line:#f0e2d2; --green:#2f9e5b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Poppins','Noto Sans Ethiopic',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+  .am{font-family:'Noto Sans Ethiopic','Poppins',sans-serif}
+  .hidden{display:none!important}
+
+  /* ---------- LOGIN (generic, no cafe name) ---------- */
+  #login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+    background:radial-gradient(circle at 20% 10%,#ffd9a8 0,transparent 40%),radial-gradient(circle at 90% 90%,#ffc27a 0,transparent 40%),var(--bg)}
+  .login-card{background:var(--card);width:100%;max-width:400px;border-radius:24px;padding:32px 26px;
+    box-shadow:0 20px 50px rgba(217,111,8,.18);text-align:center}
+  .gen-icon{width:84px;height:84px;margin:0 auto 14px;border-radius:50%;background:var(--orange);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:38px}
+  .login-card h1{font-size:21px;margin-bottom:4px}
+  .login-card p.sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+  .field{text-align:left;margin-bottom:14px}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
+  .field input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;
+    font-family:inherit;background:#fffdfa;outline:none;transition:.15s}
+  .field input:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(245,138,31,.15)}
+  .pw-wrap{position:relative}
+  .pw-wrap button{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;
+    color:var(--orange-d);font-weight:600;font-size:12px;cursor:pointer;padding:6px 8px}
+  .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--orange);color:#fff;font-weight:700;
+    font-size:15px;cursor:pointer;font-family:inherit;transition:.15s}
+  .btn:hover{background:var(--orange-d)}
+  .err{color:var(--red);font-size:13px;margin-top:12px;min-height:18px}
+  .shake{animation:shake .35s}
+  @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+  /* ---------- LOGO (same file used everywhere) ---------- */
+  .lg{object-fit:contain;flex-shrink:0;display:block}
+  .lg-badge{border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;
+    justify-content:center;font-weight:700;flex-shrink:0}
+
+  /* ---------- DASHBOARD ---------- */
+  header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+  .head-in{max-width:980px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+  .head-in h2{font-size:15px;line-height:1.2}
+  .head-in small{color:var(--muted);font-size:11px}
+  .head-in .sp{flex:1}
+  .who{font-size:12px;color:var(--muted)}
+  .out{background:var(--orange-l);color:var(--orange-d);border:0;padding:8px 14px;border-radius:10px;font-weight:600;
+    cursor:pointer;font-family:inherit;font-size:13px}
+
+  main{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+  .hero{background:linear-gradient(135deg,var(--orange),#ffb45e);color:#fff;border-radius:22px;padding:22px;margin-bottom:18px}
+  .hero h1{font-size:22px;margin-bottom:6px}
+  .hero p{opacity:.95;font-size:14px;line-height:1.55}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+  .stat b{font-size:30px;color:var(--orange-d);display:block;line-height:1.1}
+  .stat span{font-size:12px;color:var(--muted)}
+  .stat.red b{color:var(--red)}
+  .stat.green b{color:var(--green)}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:18px}
+  .panel h3{font-size:16px;margin-bottom:14px}
+  .bar{margin-bottom:14px}
+  .bar .lbl{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-bottom:6px}
+  .bar .track{height:12px;background:var(--orange-l);border-radius:20px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:20px;background:var(--orange);width:0;transition:width 1s ease}
+  .bar .fill.r{background:var(--red)}
+
+  .fix{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+  .fix div{background:#f4fbf6;border:1px solid #cfeedb;border-radius:14px;padding:14px;font-size:13px;line-height:1.5}
+  .fix b{display:block;color:var(--green);margin-bottom:4px;font-size:14px}
+
+  .search{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:14px;
+    font-family:inherit;background:#fffdfa;outline:none;margin-bottom:12px}
+  .search:focus{border-color:var(--orange)}
+  .frow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .frow-l{font-size:11px;font-weight:600;color:var(--muted);width:100%;margin-bottom:-2px}
+  .chip{border:1.5px solid var(--line);background:#fff;padding:7px 13px;border-radius:30px;font-size:12.5px;
+    cursor:pointer;font-family:inherit;font-weight:600;color:var(--muted)}
+  .chip.on{background:var(--orange);border-color:var(--orange);color:#fff}
+  .count{font-size:12px;color:var(--muted);margin:10px 0 14px}
+
+  .review{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
+  .rv-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:700;flex-shrink:0}
+  .rv-top .nm{font-weight:700;font-size:15px}
+  .rv-top .meta{font-size:11px;color:var(--muted)}
+  .stars{margin-left:auto;color:#f5a623;letter-spacing:1px;font-size:15px;white-space:nowrap}
+  .stars i{color:#e6d9c9;font-style:normal}
+  .rv-text{font-size:15px;line-height:1.75}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;
+    background:var(--orange-l);color:var(--orange-d)}
+  .tag.call{background:#fde8e8;color:var(--red)}
+  .tag.good{background:#e4f6ea;color:var(--green)}
+  .tag.lang{background:#f1ece6;color:var(--muted)}
+  .tr-btn{background:none;border:0;color:var(--orange-d);font-size:12px;font-weight:600;cursor:pointer;
+    font-family:inherit}
+  .tr{margin-top:10px;font-size:12.5px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px;
+    display:none;font-family:'Poppins',sans-serif;line-height:1.5}
+  .tr.show{display:block}
+
+  .reply{margin-top:14px;background:#fff8ef;border:1px solid var(--line);border-left:4px solid var(--orange);
+    border-radius:14px;padding:12px 14px}
+  .rp-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .rp-head b{font-size:13px}
+  .rp-head .mt{display:inline-block;font-size:10.5px;font-weight:600;background:var(--orange);color:#fff;
+    padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle}
+  .rp-head .meta{font-size:11px;color:var(--muted)}
+  .rp-text{font-size:14px;line-height:1.65}
+  .empty{text-align:center;color:var(--muted);padding:30px 0;font-size:14px}
+  .note{font-size:12px;color:var(--muted);text-align:center;margin-top:20px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- ================= ADMIN LOGIN (generic) ================= -->
+<section id="login">
+  <form class="login-card" id="loginForm" autocomplete="off">
+    <div class="gen-icon">💬</div>
+    <h1>Feedback Tracker</h1>
+    <p class="sub">Admin sign-in</p>
+
+    <div class="field">
+      <label for="u">Username</label>
+      <input id="u" type="text" placeholder="Enter username" autocapitalize="off" required>
+    </div>
+    <div class="field">
+      <label for="p">Password</label>
+      <div class="pw-wrap">
+        <input id="p" type="password" placeholder="Enter password" required>
+        <button type="button" id="eye">Show</button>
+      </div>
+    </div>
+    <button class="btn" type="submit">Log in</button>
+    <div class="err" id="err"></div>
+  </form>
+</section>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="app" class="hidden">
+  <header>
+    <div class="head-in">
+      <span id="logoH"></span>
+      <div>
+        <h2 id="cafeName"></h2>
+        <small>Customer Feedback Tracker</small>
+      </div>
+      <div class="sp"></div>
+      <span class="who" id="who"></span>
+      <button class="out" id="logout">Log out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Customer Feedback Report</h1>
+      <p>Customers love the food, but the welcome, the waiting and the promotions are letting us down.
+         Every comment is listed below together with our management team's reply.</p>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="panel">
+      <h3>What are customers complaining about?</h3>
+      <div id="bars"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Fixes in progress</h3>
+      <div class="fix">
+        <div><b>🔔 Table call button</b>A bell or QR code on every table that pings the waiter, so nobody has to clap or stand up.</div>
+        <div><b>⏱ 2-minute rule</b>A staff member greets and takes the order within 2 minutes of a guest sitting down.</div>
+        <div><b>😊 Welcome training</b>The manager and door staff greet every guest with a smile. The first face is the first meal.</div>
+        <div><b>📣 Honest promotions</b>Ad photos, sizes and offers must match exactly what is served at the table.</div>
+      </div>
+    </div>
+
+    <div class="panel" style="padding-bottom:8px">
+      <h3>All customer comments</h3>
+      <input class="search" id="q" type="search" placeholder="Search comments or names…">
+      <div class="frow" id="catChips"><div class="frow-l">Type</div></div>
+      <div class="frow" id="langChips"><div class="frow-l">Language</div></div>
+      <div class="count" id="count"></div>
+      <div id="list"></div>
+    </div>
+
+    <p class="note">Internal use only</p>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   CAFE SETTINGS  (the name & logo are only shown AFTER login)
+   Put the cafe logo next to this file and name it logo.png
+   ========================================================= */
+const CAFE = {
+  name: "Dቦራ Pizza & Burger",
+  short: "Dቦ",
+  logo: "logo.png",
+  users: ["Habtamu_DBR", "Admin"],
+  password: "Diboratracker1234"
+};
+
+/* ---------- Comments ----------
+   l: am = Amharic script | lat = Amharic in English letters | en = English
+   c: call | slow | face | promo | good          s: stars     d: day in Nov 2026
+   n: name   e: Latin spelling of the name (for Amharic-script names)
+   t: comment   x: English translation (am / lat only)          */
+const R = [
+/* ===== CAN'T CALL STAFF (16) ===== */
+{n:"ሙሉጌታ ኃይሉ",e:"Mulugeta Hailu",l:"am",c:"call",s:3,d:7,
+ t:"አስተናጋጅ ለመጥራት እጅ ማጨብጨብ ያሳፍራል። ለምን ጠረጴዛ ላይ የሚጠራ ደወል ወይም ቁልፍ አይቀመጥም? ወይስ ራሳችን ተነስተን እናገልግል?",
+ x:"Clapping my hands to call a waiter is embarrassing. Why isn't there a call bell or button on the table? Or should we get up and serve ourselves?"},
+{n:"ዳዊት በቀለ",e:"Dawit Bekele",l:"am",c:"call",s:1,d:5,
+ t:"ሰውን ለመጥራት ማጨብጨብ አፍሬ ብዙ ጊዜ ዝም ብዬ ተቀመጥኩ። በመጨረሻ ሳልበላ ተነስቼ ወጣሁ። ሌላ ቦታ እሄዳለሁ።",
+ x:"I was too embarrassed to clap to call anyone, so I just sat there for a long time. In the end I left without eating. I'll go somewhere else."},
+{n:"ብሩክ መኮንን",e:"Biruk Mekonnen",l:"am",c:"call",s:2,d:10,
+ t:"እዚህ የመጣሁት ለመስተናገድ ነው ወይስ ራሴን ለማገልገል? ማንም አይመጣም፤ ተነስቼ ካልጠራሁ ምንም የለም። ታዲያ ራሳችንን እናገልግል ማለት ነው?",
+ x:"Did I come here to be served or to serve myself? Nobody comes; if I don't get up and call, nothing happens. So are we supposed to serve ourselves?"},
+{n:"ሊያ መንግስቱ",e:"Liya Mengistu",l:"am",c:"call",s:2,d:11,
+ t:"ከጓደኞቼ ጋር ሄድን፤ ማንም አላየንም። እየተፈራረቅን እጅ ስናጨበጭብ ሰለቸን። ቢያንስ የሚጠራ ደወል ያስቀምጡ።",
+ x:"I went with my friends and nobody noticed us. We got tired of taking turns clapping. At least put a call bell."},
+{n:"ቴዎድሮስ ግርማ",e:"Tewodros Girma",l:"am",c:"call",s:2,d:9,
+ t:"ጠረጴዛዬ ላይ ተቀምጬ አስተናጋጅ በዓይኔ ስፈልግ ግማሽ ሰዓት አለፈ። የምጠራበት ምንም መንገድ የለም። ይህ አሰራር መስተካከል አለበት።",
+ x:"Half an hour passed while I sat at my table searching for a waiter with my eyes. There is no way to call anyone. This system must be fixed."},
+{n:"ሕይወት ዘለቀ",e:"Hiwot Zeleke",l:"am",c:"call",s:2,d:3,
+ t:"አስተናጋጅን ለመጥራት ማጨብጨብ ወይም መጮህ ለእኔ ከባድ ነው። ሳልጠራ ቁጭ ብዬ ስጠብቅ ሰዓታት የሄደ መሰለኝ። የሚጠራ ቁልፍ ያስፈልጋል።",
+ x:"Clapping or shouting to call a waiter is hard for me. Sitting and waiting without calling felt like hours. A call button is needed."},
+
+{n:"Betelhem Yilma",l:"lat",c:"call",s:3,d:11,
+ t:"Astenagaj lemetera ij mechebchebe betam yasfeligal. Table lay dewel yelem? Weyis rasachin tenestchen enagelgil?",
+ x:"Clapping to call a waiter is really embarrassing. Is there no bell on the table? Or should we get up and serve ourselves?"},
+{n:"Amanuel Teka",l:"lat",c:"call",s:2,d:8,
+ t:"Chebchebin chebchebin, ijachin eskiyamem, man alsemam. Table lay dewel wey button bimekem min yaschegiral?",
+ x:"We clapped and clapped until our hands hurt and nobody heard. What's the problem with putting a bell or button on the table?"},
+{n:"Rediet Solomon",l:"lat",c:"call",s:1,d:6,
+ t:"Rasachin tenestchen enagelgil new weyis? Chebchebe chebchebe man alsemam, salbela wetahu.",
+ x:"So are we supposed to get up and serve ourselves? I clapped and clapped, nobody heard, I left without eating."},
+{n:"Nahom Getachew",l:"lat",c:"call",s:2,d:12,
+ t:"Ij mechebchebe yasfeligal, gin ayyi man ayiyenim. Yihe system meseteker alebet, table lay dewel yikemetu.",
+ x:"Clapping is embarrassing and nobody even notices. This system must be fixed; put a bell on the table."},
+
+{n:"Samuel Worku",l:"en",c:"call",s:2,d:10,
+ t:"I sat for 25 minutes waiting for someone to notice me. Clapping my hands in a restaurant feels so awkward. Why not put a call button on every table?"},
+{n:"Meklit Bogale",l:"en",c:"call",s:2,d:9,
+ t:"Are we expected to serve ourselves? I stood up twice just to find a waiter. This is a burger house, not a self-service canteen."},
+{n:"Eyob Desta",l:"en",c:"call",s:1,d:7,
+ t:"Half my group gave up and left because nobody came to our table and we were too embarrassed to keep clapping. Please install a bell or a QR call system."},
+{n:"Helen Teshome",l:"en",c:"call",s:3,d:4,
+ t:"The burger was fine but I had to wave at the waiter like I was stopping a taxi. A simple call button would fix this."},
+{n:"Kidus Alemayehu",l:"en",c:"call",s:2,d:2,
+ t:"We had to take turns walking to the counter to order, to ask for drinks and to get the bill. If I wanted self-service I would have gone to a buffet."},
+{n:"Mahlet Asfaw",l:"en",c:"call",s:1,d:1,
+ t:"No bell, no waiter in sight, and clapping makes everyone stare. Left hungry. Please do better."},
+
+/* ===== SLOW SERVICE (10) ===== */
+{n:"ሰላማዊት ተስፋዬ",e:"Selamawit Tesfaye",l:"am",c:"slow",s:2,d:8,
+ t:"ተቀምጬ ከ20 ደቂቃ በላይ ጠበቅሁ፤ ማንም መጥቶ 'ምን ልታዘዝ?' አላለኝም። በመጨረሻ ራሴ ተነስቼ ሄጄ ማዘዝ ነበረብኝ።",
+ x:"I sat for over 20 minutes and nobody came to ask 'what would you like?'. In the end I had to get up and go order myself."},
+{n:"ትዕግስት አለሙ",e:"Tigist Alemu",l:"am",c:"slow",s:3,d:6,
+ t:"በርገሩ ጥሩ ነው፤ ግን አገልግሎቱ በጣም ዘገምተኛ ነው። ማንም ፈገግ ብሎ አያስተናግድም። 'ደንበኛ ንጉሥ ነው' አይደል የሚባለው?",
+ x:"The burger is good, but the service is very slow and nobody serves with a smile. Isn't it said that 'the customer is king'?"},
+{n:"ዮናስ ታደሰ",e:"Yonas Tadesse",l:"am",c:"slow",s:1,d:4,
+ t:"ካዘዝኩ በኋላ ምግቡ ለመምጣት አንድ ሰዓት ያህል ፈጀ። ማንም መጥቶ ይቅርታ እንኳን አላለም። ይህ ነው እንግዲህ አገልግሎት?",
+ x:"After I ordered, the food took about an hour. Nobody even came to apologize. Is this what they call service?"},
+
+{n:"Bereket Shiferaw",l:"lat",c:"slow",s:2,d:7,
+ t:"Megib lemetat 45 dakika tebekin. Man min litazez bilo ayigebanim, ersachew bicha yaweralu. Betam zegeye.",
+ x:"We waited 45 minutes for the food. Nobody comes to ask what to order; they only talk among themselves. Very slow."},
+{n:"Eden Fikadu",l:"lat",c:"slow",s:2,d:5,
+ t:"Table lay ketemetku 20 dakika honegn, man 'min litazez?' yemil yelem. Betam yasselachal.",
+ x:"I've been sitting at the table for 20 minutes and nobody asks 'what would you like to order?'. Really tiring."},
+{n:"Fikru Wolde",l:"lat",c:"slow",s:3,d:3,
+ t:"Hamburger-u betam tafach new, gin agelgilotu betam zegeye new.",
+ x:"The hamburger is very tasty, but the service is very slow."},
+
+{n:"Getnet Abera",l:"en",c:"slow",s:2,d:11,
+ t:"Nobody asked what we wanted for 30 minutes. The place was half empty, so there's no excuse."},
+{n:"Bethlehem Tadele",l:"en",c:"slow",s:2,d:9,
+ t:"Waited forever for the bill too. Waiters seem to disappear the moment you sit down."},
+{n:"Robel Negash",l:"en",c:"slow",s:3,d:6,
+ t:"Food came out hot, but the order-taking is painfully slow. Hire more waiters or train the ones you have."},
+{n:"Sara Mulugeta",l:"en",c:"slow",s:2,d:2,
+ t:"We asked for water three times. The service needs a serious upgrade."},
+
+/* ===== UNFRIENDLY WELCOME (7) ===== */
+{n:"አበበ ከበደ",e:"Abebe Kebede",l:"am",c:"face",s:2,d:9,
+ t:"ሬስቶራንቱ ስገባ ማናጀሩ ፊቱ ኮስተር ብሎ ነበር የተቀበለኝ። በፈገግታ የማያገለግል ሰው ፊት እያየሁ እንዴት ልበላ? የዚያ ፊት ነው የመጀመሪያ ምግቤ የሆነው።",
+ x:"When I walked in, the manager received me with a stern face. How can I eat while looking at someone who doesn't serve with a smile? That face became my first meal."},
+{n:"ሜሮን አባተ",e:"Meron Abate",l:"am",c:"face",s:1,d:12,
+ t:"በፈገግታ 'እንኳን ደህና መጡ' ብሎ የሚቀበል ሰው የለም። በሩ ላይ ያለው ሰው ፊቱ ኮስተር ብሏል፤ ገና ሳልቀመጥ የምግብ ፍላጎቴ ጠፋ።",
+ x:"Nobody welcomes you with a smile and a 'welcome'. The person at the door looks stern; I lost my appetite before I even sat down."},
+{n:"ሄኖክ አሰፋ",e:"Henok Assefa",l:"am",c:"face",s:2,d:2,
+ t:"ማናጀሩ ሁሉንም ሰው በጥርጣሬ ነው የሚያየው። ፈገግታ ከዋጋው ውስጥ አልተካተተም እንዴ? ባለቤቴ ከዚህ በኋላ አልመጣም አለች።",
+ x:"The manager looks at everyone with suspicion. Is a smile not included in the price? My wife said she won't come again."},
+
+{n:"Saron Dereje",l:"lat",c:"face",s:2,d:10,
+ t:"Manager fitu koster bilo new yetekebelen. Fegegta yelem, 'enkuan dehna metachu' yemil yelem. Yih fit new yemekemeriya megibe honew.",
+ x:"The manager received us with a stern face. No smile, no 'welcome'. This face became my first meal."},
+{n:"Natnael Zewdu",l:"lat",c:"face",s:3,d:4,
+ t:"Astenagajochu tiru nachew, gin manager fitu betam koster bilo new. Bemekebel lay fegegta yasfeligal.",
+ x:"The waiters are nice, but the manager's face is very stern. A smile is needed at the welcome."},
+
+{n:"Marta Haile",l:"en",c:"face",s:2,d:8,
+ t:"The manager greeted us with the strictest face I've ever seen. It felt like we were in trouble before we even sat down."},
+{n:"Daniel Kassa",l:"en",c:"face",s:2,d:5,
+ t:"It's hard to enjoy a meal when the first thing you see is a frown. A smile costs nothing."},
+
+/* ===== PROMOTION vs REALITY (5) ===== */
+{n:"ሩት ወልዴ",e:"Ruth Wolde",l:"am",c:"promo",s:2,d:10,
+ t:"በማስታወቂያ ላይ ያየሁት በርገር አንድ ነገር ነው፤ እዚህ የመጣልኝ ደግሞ ሌላ። ትንሽ ሆኖ ነው የመጣው። ማስታወቂያና እውነታ እንዲህ መራራቅ የለባቸውም።",
+ x:"The burger I saw in the ad is one thing; the one that arrived is another. It came out small. Ads and reality shouldn't be so far apart."},
+{n:"ቤዛዊት መኩሪያ",e:"Bezawit Mekuria",l:"am",c:"promo",s:2,d:1,
+ t:"'ቅናሽ አለ' ተብሎ በማስታወቂያ ተጋብዤ መጣሁ፤ እዚህ ስደርስ ግን ማንም ስለ ቅናሹ አያውቅም። ቃልና ተግባር አልተገናኙም።",
+ x:"I came because the ad invited me with 'there's a discount', but when I got here nobody knew about the offer. Words and actions didn't match."},
+{n:"Surafel Mulat",l:"lat",c:"promo",s:2,d:9,
+ t:"Promotion lay yayehut burger ena yemetalign burger yetelelu nachew. Tinish new, cheese yelewum. Betam yasazinal.",
+ x:"The burger I saw in the promotion and the one I got are different. It's small and has no cheese. Very disappointing."},
+{n:"Seble Kidane",l:"en",c:"promo",s:2,d:7,
+ t:"The promotion said 'buy one burger, get a free drink'. When I got there, the waiter said the offer ended last month. Misleading."},
+{n:"Zerihun Eshetu",l:"en",c:"promo",s:1,d:3,
+ t:"Your Instagram photos look amazing. What arrived at my table was half that size. The promotion and reality are two different things."},
+
+/* ===== POSITIVE (16) ===== */
+{n:"ፍሬህይወት ሽመልስ",e:"Frehiwot Shimelis",l:"am",c:"good",s:5,d:12,
+ t:"የበርገሩ ጣዕም አስደናቂ ነው! ስጋው ለስላሳ፣ ዳቦው ትኩስ ነው። ፒዛውም አይብ በአይብ ነው። ለምግቡ አምስት ኮከብ እሰጣለሁ።",
+ x:"The burger's taste is amazing! The meat is tender and the bread is fresh. The pizza is full of cheese too. Five stars for the food."},
+{n:"ምስጋናው ተሾመ",e:"Misganaw Teshome",l:"am",c:"good",s:5,d:10,
+ t:"ዋጋው ተመጣጣኝ ነው፣ ቦታውም ንጹህ ነው። ከቤተሰቤ ጋር በጣም ተደስተን ነበር። በሚቀጥለው ደግሞ እመጣለሁ።",
+ x:"The prices are reasonable and the place is clean. My family and I had a great time. I'll come again."},
+{n:"ጽዮን አየለ",e:"Tsion Ayele",l:"am",c:"good",s:5,d:7,
+ t:"ፒዛቸው ከሌላ ቦታ የተለየ ነው፤ አይቡ ሲለጠጥ ያምራል። ልጆቼ በጣም ወደዱት።",
+ x:"Their pizza is different from other places; the cheese stretches beautifully. My kids loved it."},
+{n:"ኤልያስ ወንድሙ",e:"Elias Wondimu",l:"am",c:"good",s:4,d:5,
+ t:"ምግቡ ሞቅ ብሎ ነው የመጣው፣ ጣዕሙም ልዩ ነው። አገልግሎቱ ትንሽ ቢሻሻል ኖሮ ምንም ጉድለት አይኖረውም ነበር።",
+ x:"The food arrived hot and the taste is special. If the service improved a little, there would be no flaw."},
+{n:"ሰናይት በቀለ",e:"Senait Bekele",l:"am",c:"good",s:5,d:1,
+ t:"ዛሬ ያስተናገደችኝ ሴት ጨዋና ፊቷ በፈገግታ የተሞላ ነበር። እንደዚህ አይነት ሰዎች ይብዙ። ምግቡም ጥሩ ነው።",
+ x:"The woman who served me today was polite and her face was full of smiles. May there be more people like her. The food is good too."},
+
+{n:"Yohannes Berhe",l:"lat",c:"good",s:5,d:12,
+ t:"Burgeru betam tafach new! Siga lelasa, dabo tiruz new. 5 kokeb yegebal.",
+ x:"The burger is very tasty! The meat is tender and the bread is fresh. It deserves 5 stars."},
+{n:"Aster Tekle",l:"lat",c:"good",s:5,d:11,
+ t:"Pizzawun betam wedjewalehu, cheese bezu new. Waga temetatagn new, tiru bota.",
+ x:"I really love the pizza, lots of cheese. The price is reasonable, a great place."},
+{n:"Mesfin Tsegaye",l:"lat",c:"good",s:4,d:8,
+ t:"Bota-w nitsuh new, megibum tafach new. Waga temetatagn new. Beqeretu degmo emetalehu.",
+ x:"The place is clean and the food is tasty. The price is reasonable. I'll come again soon."},
+{n:"Kalkidan Wondimu",l:"lat",c:"good",s:5,d:6,
+ t:"Ke beteseb gar hedene betam tedesetin. Lijochachin burgeru betam wedidewal. Tiru megib!",
+ x:"We went with family and enjoyed it a lot. Our kids really loved the burger. Great food!"},
+{n:"Lemma Debebe",l:"lat",c:"good",s:4,d:2,
+ t:"Megibu betam tafach new. Agelgilotu tinish bitashashal minim chigir ayikerim.",
+ x:"The food is very tasty. If the service improved a little there would be no problem at all."},
+
+{n:"Hana Berhanu",l:"en",c:"good",s:5,d:11,
+ t:"Best burger I've had in town! Juicy, perfectly grilled, and the sauce is incredible. Five stars for the food."},
+{n:"Ermias Tilahun",l:"en",c:"good",s:5,d:9,
+ t:"The pizza had a crispy crust and loads of cheese. Great value for money."},
+{n:"Genet Bayou",l:"en",c:"good",s:5,d:6,
+ t:"Clean place, tasty food, fair prices. We will definitely be back with the whole family."},
+{n:"Mekdes Alem",l:"en",c:"good",s:5,d:4,
+ t:"Loved the cheese burger and the fries. Our waitress today was friendly and quick. More of that please!"},
+{n:"Kidist Tesema",l:"en",c:"good",s:4,d:3,
+ t:"Good food and a nice atmosphere for a quick lunch with colleagues. Just hoping the service gets a bit faster."},
+{n:"Abel Haile",l:"en",c:"good",s:5,d:2,
+ t:"My take-away order was ready on time and still hot. The packaging was neat too."}
+];
+
+/* ---------- Management replies ---------- */
+const REPLY = {
+ en:{
+  call:["We are sorry to hear that, and thank you for telling us. We are installing a call button on every table and will fix this as soon as possible.",
+        "We apologize for the inconvenience. Having to clap or stand up to get service is not acceptable. A table call system is being set up and we will solve this shortly."],
+  slow:["We are sorry for the long wait. We are adding more staff and a 2-minute greeting rule for every table. We will solve this as soon as possible.",
+        "Sorry to hear that, and thank you for your honest feedback. We are retraining our service team so every guest is attended to quickly. Improvements are coming shortly."],
+  face:["We are sorry that your welcome was not a warm one. We have shared your feedback with our manager and team, and friendly, smiling greetings are now our priority.",
+        "Thank you for telling us, and we apologize. Every guest deserves a warm welcome. We will address this with our team right away."],
+  promo:["We are sorry for the mismatch between our promotion and your visit. We are reviewing our promotions so that what you see is what you get. We will fix this as soon as possible.",
+         "We apologize for the disappointment. We are checking that every offer and photo we share reflects what is actually served, and we will solve this shortly."],
+  good:["Thank you so much for the kind words! We are glad you enjoyed it, and we are working to make every part of your visit as good as the food. See you again soon!",
+        "We really appreciate your feedback! We will share it with our kitchen and service team. We look forward to welcoming you again."]
+ },
+ am:{
+  call:["ይህንን በመስማታችን አዝነናል፤ ይቅርታ እንጠይቃለን። አስተያየትዎን ስለነገሩን እናመሰግናለን። በእያንዳንዱ ጠረጴዛ ላይ የሚጠራ ደወል እናስቀምጣለን፤ በተቻለ ፍጥነት እናስተካክለዋለን።",
+        "ይህንን በመስማታችን አዝነናል። ደንበኛ አገልግሎት ለማግኘት ማጨብጨብ ወይም መነሳት የለበትም። የጠረጴዛ መጥሪያ ሥርዓት እያዘጋጀን ነው፤ በቅርቡ እናስተካክለዋለን።"],
+  slow:["ለዘገየው አገልግሎት ይቅርታ እንጠይቃለን። ተጨማሪ ሰራተኞች እየጨመርን ሲሆን ሁሉም ጠረጴዛ በ2 ደቂቃ ውስጥ እንዲስተናገድ እናደርጋለን። በተቻለ ፍጥነት እናስተካክላለን።",
+        "ይህንን በመስማታችን አዝነናል፤ ግልጽ አስተያየትዎን እናመሰግናለን። የአገልግሎት ቡድናችንን እያሠለጠንን ነው፤ በቅርቡ ለውጥ ያያሉ።"],
+  face:["ሞቅ ያለ አቀባበል ባለማግኘትዎ ይቅርታ እንጠይቃለን። አስተያየትዎን ለማናጀሩና ለሰራተኞቹ አድርሰናል፤ ከዚህ በኋላ በፈገግታ መቀበል ቀዳሚ ስራችን ነው።",
+        "ይህንን በመስማታችን አዝነናል። እያንዳንዱ እንግዳ ሞቅ ያለ አቀባበል ይገባዋል፤ ጉዳዩን ከቡድናችን ጋር ወዲያውኑ እናያለን።"],
+  promo:["በማስታወቂያችንና በጉብኝትዎ መካከል ልዩነት በመኖሩ ይቅርታ እንጠይቃለን። ያዩት እንዲያገኙ ማስታወቂያዎቻችንን እየገመገምን ነው፤ በተቻለ ፍጥነት እናስተካክለዋለን።",
+         "ላስከተልነው ቅሬታ ይቅርታ እንጠይቃለን። የምናሳየው ፎቶና ቅናሽ ሁሉ ከሚቀርበው ጋር እንዲመሳሰል እናረጋግጣለን፤ በቅርቡ እናስተካክለዋለን።"],
+  good:["ለደግ ቃልዎ እጅግ እናመሰግናለን! ወደውት በመሄድዎ ደስ ብሎናል፤ እያንዳንዱ የጉብኝትዎ ክፍል እንደ ምግቡ ጥሩ እንዲሆን እየሰራን ነው። በቅርቡ እንገናኝ!",
+        "ስለ አስተያየትዎ በጣም እናመሰግናለን! ለወጥ ቤታችንና ለአገልግሎት ቡድናችን እናደርሳለን። እንደገና ለመቀበል እንጓጓለን።"]
+ }
+};
+
+const CATS = [
+  ["all","All"],["bad","Complaints"],["good","Positive"],
+  ["call","Can't call staff"],["slow","Slow service"],["face","Unfriendly welcome"],["promo","Promo ≠ reality"]
+];
+const LANGS = [["all","All"],["am","አማርኛ"],["lat","Amharic (English letters)"],["en","English"]];
+const TAGS  = { call:"🔔 Can't call staff", slow:"⏱ Slow service", face:"😐 Unfriendly welcome", promo:"📣 Promo ≠ reality", good:"👍 Positive" };
+const LANGLBL = { am:"አማርኛ", lat:"Amharic (English letters)", en:"English" };
+const COLORS = ["#c0583a","#7a4fa3","#2f7fa8","#3a9a6b","#d98a1a","#b5446e","#4f6bd6","#8a6d3b"];
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+
+/* One logo for the whole site (header + management replies).
+   If logo.png is missing, an orange badge is shown instead. */
+function logoEl(size){
+  const img = new Image();
+  img.src = CAFE.logo; img.alt = CAFE.name; img.className = "lg";
+  img.style.width = img.style.height = size + "px";
+  img.onerror = () => {
+    const b = document.createElement("div");
+    b.className = "lg-badge";
+    b.style.width = b.style.height = size + "px";
+    b.style.fontSize = Math.round(size * .36) + "px";
+    b.textContent = CAFE.short;
+    img.replaceWith(b);
+  };
+  return img;
+}
+
+/* ---------- Login ---------- */
+function showApp(user){
+  $("login").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  $("who").textContent = user;
+  $("cafeName").textContent = CAFE.name;
+  document.title = CAFE.name + " – Feedback";
+  $("logoH").replaceChildren(logoEl(46));
+  buildStats(); buildChips(); render();
+  setTimeout(() => document.querySelectorAll(".fill").forEach(f => f.style.width = f.dataset.w + "%"), 100);
+}
+$("loginForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const u = $("u").value.trim(), p = $("p").value;
+  if (CAFE.users.includes(u) && p === CAFE.password){
+    try{ sessionStorage.setItem("fb_admin", u); }catch(_){}
+    showApp(u);
+  } else {
+    $("err").textContent = "Wrong username or password.";
+    const c = document.querySelector(".login-card");
+    c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
+  }
+});
+$("eye").addEventListener("click", () => {
+  const p = $("p"), show = p.type === "password";
+  p.type = show ? "text" : "password";
+  $("eye").textContent = show ? "Hide" : "Show";
+});
+$("logout").addEventListener("click", () => {
+  try{ sessionStorage.removeItem("fb_admin"); }catch(_){}
+  location.reload();
+});
+
+/* ---------- Stats (all computed from the comments) ---------- */
+const count = c => R.filter(r => r.c === c).length;
+function buildStats(){
+  const bad = R.filter(r => r.c !== "good").length, good = count("good");
+  const avg = (R.reduce((a, r) => a + r.s, 0) / R.length).toFixed(1);
+  $("stats").innerHTML = `
+    <div class="stat"><b>${R.length}</b><span>Total comments</span></div>
+    <div class="stat red"><b>${bad}</b><span>Complaints</span></div>
+    <div class="stat green"><b>${good}</b><span>Positive comments</span></div>
+    <div class="stat red"><b>${count("call")}</b><span>Complaints about not being able to call staff</span></div>
+    <div class="stat"><b>${avg} ★</b><span>Average rating</span></div>`;
+  const rows = [["call","No easy way to call staff (clapping / getting up)"],
+                ["slow","Slow service – nobody asks what to order"],
+                ["face","Strict, unwelcoming face at the door"],
+                ["promo","Promotion doesn't match what we serve"]];
+  const max = Math.max(...rows.map(r => count(r[0])));
+  $("bars").innerHTML = rows.map(([k, label]) => {
+    const n = count(k), pct = Math.round(n / bad * 100);
+    return `<div class="bar"><div class="lbl"><span>${label}</span><b>${n} · ${pct}%</b></div>
+      <div class="track"><div class="fill ${k === "call" ? "r" : ""}" data-w="${Math.round(n / max * 100)}"></div></div></div>`;
+  }).join("");
+}
+
+/* ---------- Filters ---------- */
+const state = { cat:"all", lang:"all", q:"" };
+function catCount(k){
+  return k === "all" ? R.length : k === "bad" ? R.filter(r => r.c !== "good").length : count(k);
+}
+function buildChips(){
+  const mk = (box, defs, key, counter) => {
+    defs.forEach(([v, label]) => {
+      const b = document.createElement("button");
+      b.className = "chip" + (state[key] === v ? " on" : "");
+      b.dataset.v = v;
+      b.textContent = label + " (" + counter(v) + ")";
+      b.addEventListener("click", () => {
+        state[key] = v;
+        box.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.v === v));
+        render();
+      });
+      box.appendChild(b);
+    });
+  };
+  mk($("catChips"), CATS, "cat", catCount);
+  mk($("langChips"), LANGS, "lang", v => v === "all" ? R.length : R.filter(r => r.l === v).length);
+}
+$("q").addEventListener("input", e => { state.q = e.target.value.trim().toLowerCase(); render(); });
+
+function matches(r){
+  if (state.cat === "bad" && r.c === "good") return false;
+  if (!["all","bad"].includes(state.cat) && r.c !== state.cat) return false;
+  if (state.lang !== "all" && r.l !== state.lang) return false;
+  if (state.q){
+    const hay = (r.n + " " + (r.e || "") + " " + r.t + " " + (r.x || "")).toLowerCase();
+    if (!hay.includes(state.q)) return false;
+  }
+  return true;
+}
+
+/* ---------- Render ALL comments (newest first) ---------- */
+const SORTED = R.map((r, i) => ({ ...r, i })).sort((a, b) => b.d - a.d);
+
+function card(r){
+  const el = document.createElement("div");
+  el.className = "review";
+  const stars = "★".repeat(r.s) + "<i>" + "★".repeat(5 - r.s) + "</i>";
+  const rl = r.l === "am" ? "am" : "en";
+  const reply = REPLY[rl][r.c][r.i % 2];
+  const rdate = "Nov " + Math.min(r.d + 1, 12) + ", 2026";
+  el.innerHTML = `
+    <div class="rv-top">
+      <div class="avatar ${r.l === "am" ? "am" : ""}" style="background:${COLORS[r.i % COLORS.length]}">${r.n.charAt(0)}</div>
+      <div><div class="nm ${r.l === "am" ? "am" : ""}">${r.n}</div>
+        <div class="meta">${r.e ? r.e + " · " : ""}Nov ${r.d}, 2026</div></div>
+      <div class="stars">${stars}</div>
+    </div>
+    <div class="rv-text ${r.l === "am" ? "am" : ""}">${r.t}</div>
+    <div class="tags">
+      <span class="tag ${r.c === "call" ? "call" : r.c === "good" ? "good" : ""}">${TAGS[r.c]}</span>
+      <span class="tag lang">${LANGLBL[r.l]}</span>
+      ${r.x ? '<button class="tr-btn">Show English</button>' : ""}
+    </div>
+    ${r.x ? '<div class="tr">' + r.x + "</div>" : ""}
+    <div class="reply">
+      <div class="rp-head">
+        <span class="slot"></span>
+        <div><b>${CAFE.name}</b><span class="mt">Management Team</span>
+          <div class="meta">Replied ${rdate}</div></div>
+      </div>
+      <p class="rp-text ${rl === "am" ? "am" : ""}">${reply}</p>
+    </div>`;
+  el.querySelector(".slot").replaceWith(logoEl(34));
+  if (r.x){
+    const btn = el.querySelector(".tr-btn"), tr = el.querySelector(".tr");
+    btn.addEventListener("click", () => {
+      tr.classList.toggle("show");
+      btn.textContent = tr.classList.contains("show") ? "Hide English" : "Show English";
+    });
+  }
+  return el;
+}
+function render(){
+  const list = $("list"), items = SORTED.filter(matches);
+  list.replaceChildren();
+  $("count").textContent = "Showing " + items.length + " of " + R.length + " comments";
+  if (!items.length){ list.innerHTML = '<div class="empty">No comments match your filters.</div>'; return; }
+  const frag = document.createDocumentFragment();
+  items.forEach(r => frag.appendChild(card(r)));
+  list.appendChild(frag);
+}
+
+/* ---------- Keep admin logged in for this browser session ---------- */
+try{
+  const s = sessionStorage.getItem("fb_admin");
+  if (s && CAFE.users.includes(s)) showApp(s);
+}catch(_){}
+</script>
+</body>
+</html>
