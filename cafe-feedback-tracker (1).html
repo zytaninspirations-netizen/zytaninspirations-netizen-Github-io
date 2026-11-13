@@ -104,6 +104,11 @@
   .tag.call{background:#fde8e8;color:var(--red)}
   .tag.good{background:#e4f6ea;color:var(--green)}
   .tag.lang{background:#f1ece6;color:var(--muted)}
+  .tag.idea{background:#fff4cc;color:#8a6500}
+  .tag.new{background:var(--red);color:#fff}
+  .notif{background:#fff8e1;border:1px solid #ffe2a0;border-radius:18px;padding:14px 16px;margin-bottom:18px;
+    display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .notif .tx{flex:1;font-size:13.5px;line-height:1.55;min-width:200px}
   .tag.src-web{background:#e6f0ff;color:#2f5fb3}
   .tag.src-map{background:#e4f6ea;color:var(--green)}
   .tag.src-tg{background:#e3f4fb;color:#1c7fa8}
@@ -168,10 +173,11 @@
   <main>
     <div class="hero">
       <h1>Customer Feedback Report</h1>
-      <p>Customers love the food, but the welcome, the waiting and the promotions are letting us down.
+      <p>Customers love the food and are asking for iced drinks, but the welcome, the waiting and the promotions are letting us down.
          Every comment is listed below together with our management team's reply.</p>
     </div>
 
+    <div class="notif" id="notif"></div>
     <div class="stats" id="stats"></div>
 
     <div class="panel">
@@ -192,6 +198,7 @@
         <div><b>⏱ 2-minute rule</b>A staff member greets and takes the order within 2 minutes of a guest sitting down.</div>
         <div><b>😊 Welcome training</b>The manager and door staff greet every guest with a smile. The first face is the first meal.</div>
         <div><b>📣 Honest promotions</b>Ad photos, sizes and offers must match exactly what is served at the table.</div>
+        <div><b>🥤 Iced drinks</b>Customers keep asking for iced coffee, iced tea and lemonade. We are working on adding them to the menu.</div>
       </div>
     </div>
 
@@ -219,7 +226,7 @@ const CAFE = {
   short: "Dቦ",
   logo: "logo.png",
   users: ["Habtamu_DBR", "Admin"],
-  password: "Diboratracker1234"
+  passwords: ["Diboratracker1234", "0939712333"]   // either one works
 };
 
 /* ---------- Comments ----------
@@ -386,7 +393,48 @@ const R = [
 {n:"Kidist Tesema",l:"en",c:"good",s:4,d:3,
  t:"Good food and a nice atmosphere for a quick lunch with colleagues. Just hoping the service gets a bit faster."},
 {n:"Abel Haile",l:"en",c:"good",s:5,d:2,
- t:"My take-away order was ready on time and still hot. The packaging was neat too."}
+ t:"My take-away order was ready on time and still hot. The packaging was neat too."},
+
+/* ===== NEW: SUGGESTIONS FROM THE WEBSITE – ICED DRINKS (8) ===== */
+{n:"ዮሴፍ ሙላቱ",e:"Yosef Mulatu",l:"am",c:"idea",s:4,d:13,
+ t:"በርገርና ፒዛ ከበላን በኋላ የሚጠጣ ቀዝቃዛ ነገር ያስፈልጋል። አይስድ ድሪንክ ለምን አትጀምሩም? በተለይ በሞቃት ቀን በደንብ ይሸጣል።",
+ x:"After eating burger and pizza we need something cold to drink. Why don't you start iced drinks? Especially on a hot day it would sell very well."},
+{n:"ኤልሳቤት ገብሩ",e:"Elsabet Gebru",l:"am",c:"idea",s:4,d:13,
+ t:"አይስድ ቡናና አይስድ ሻይ ቢኖር ደስ ይለኛል። ሌሎች ካፌዎች ጀምረዋል፤ እናንተ ለምን አልጀመራችሁም?",
+ x:"I would love to have iced coffee and iced tea. Other cafes have started; why haven't you?"},
+{n:"አብርሃም ሰይፉ",e:"Abraham Seifu",l:"am",c:"idea",s:3,d:12,
+ t:"ፒዛውና በርገሩ ጥሩ ነው፤ ግን ከዚያ ጋር የሚሄድ አይስድ ሎሚ ወይም ሶዳ የለም። እባካችሁ አይስድ መጠጦችን ጀምሩ።",
+ x:"The pizza and burger are good, but there's no iced lemonade or soda to go with them. Please start iced drinks."},
+{n:"Tsedeniya Alemu",l:"lat",c:"idea",s:4,d:13,
+ t:"Iced drinks lemin altejemeru? Zare muk new, iced coffee wey iced tea bitekemetu tiru neber.",
+ x:"Why haven't you started iced drinks? It's hot today; iced coffee or iced tea would have been great."},
+{n:"Mikiyas Tadesse",l:"lat",c:"idea",s:4,d:11,
+ t:"Burger kebelan behuala kezkaza meteyet yasfeligal. Iced drink bitejemiru betam yiwedalal.",
+ x:"After eating a burger we need something cold to drink. If you started iced drinks it would be very popular."},
+{n:"Hanan Mohammed",l:"en",c:"idea",s:4,d:13,
+ t:"Please add iced drinks to the menu: iced coffee, iced tea, lemonade. Burger and pizza go great with a cold drink!"},
+{n:"Abenezer Tsegaye",l:"en",c:"idea",s:3,d:12,
+ t:"Why aren't you serving iced drinks yet? Every other cafe near us does. It's a missed opportunity."},
+{n:"Nardos Kebede",l:"en",c:"idea",s:4,d:12,
+ t:"We need iced drinks and milkshakes too. The weather is warm and a cold drink would make the meal perfect."},
+
+/* ===== NEW: MORE POSITIVE (6) ===== */
+{n:"ዮርዳኖስ አበራ",e:"Yordanos Abera",l:"am",c:"good",s:5,d:13,
+ t:"በርገሩ ዛሬም አላሳዘነኝም! ትኩስና ጣፋጭ ነው። ለጓደኞቼም መክሬያለሁ።",
+ x:"The burger didn't disappoint me again today! It's fresh and tasty. I've recommended it to my friends too."},
+{n:"ኤፍሬም ደስታ",e:"Efrem Desta",l:"am",c:"good",s:5,d:12,
+ t:"ፒዛው ሞቅ ብሎ በፍጥነት ነው የመጣልኝ። ዛሬ አገልግሎቱ ጥሩ ነበር፤ እንዲህ ይቀጥሉ።",
+ x:"The pizza came to me hot and fast. The service was good today; keep it up."},
+{n:"Mulu Gebremedhin",l:"lat",c:"good",s:5,d:13,
+ t:"Ye zare burger betam tiru neber! Siga-w lelasa, cheese-u bezu. Agelgilotum tiru neber.",
+ x:"Today's burger was great! Tender meat, lots of cheese. The service was good too."},
+{n:"Dagim Wolde",l:"lat",c:"good",s:4,d:12,
+ t:"Pizza-w tafach new, waga-wum temetatagn. Iced drink bitakelu degmo beteley tiru yihonal.",
+ x:"The pizza is tasty and the price is reasonable. If you add iced drinks it will be even better."},
+{n:"Rahel Gebre",l:"en",c:"good",s:5,d:13,
+ t:"Friendly staff, quick service and a delicious burger today. Whatever you changed, keep it up!"},
+{n:"Yared Mekonnen",l:"en",c:"good",s:5,d:12,
+ t:"Great place for a family lunch. The kids loved the pizza and the portions are generous."}
 ];
 
 /* ---------- Management replies ---------- */
@@ -417,19 +465,26 @@ const REPLY = {
  }
 };
 
+REPLY.en.idea = [
+  "Thank you for the suggestion! We hear you, and we are working on adding iced drinks to our menu as soon as possible. Stay tuned!",
+  "Great idea, and thank you for telling us. Iced drinks are coming soon, and we will announce it as soon as they are ready."];
+REPLY.am.idea = [
+  "ለሃሳብዎ እናመሰግናለን! አይስድ መጠጦችን ወደ ምናሌያችን በተቻለ ፍጥነት ለማስጀመር እየሰራን ነው። ይጠብቁን!",
+  "በጣም ጥሩ ሃሳብ ነው፤ ስለነገሩን እናመሰግናለን። አይስድ መጠጦች በቅርቡ ይመጣሉ፤ ሲዘጋጁ እናሳውቃለን።"];
+
 const CATS = [
   ["all","All"],["bad","Complaints"],["good","Positive"],
-  ["call","Can't call staff"],["slow","Slow service"],["face","Unfriendly welcome"],["promo","Promo ≠ reality"]
+  ["idea","💡 Suggestions"],["call","Can't call staff"],["slow","Slow service"],["face","Unfriendly welcome"],["promo","Promo ≠ reality"]
 ];
 const LANGS = [["all","All"],["am","አማርኛ"],["lat","Amharic (English letters)"],["en","English"]];
-const TAGS  = { call:"🔔 Can't call staff", slow:"⏱ Slow service", face:"😐 Unfriendly welcome", promo:"📣 Promo ≠ reality", good:"👍 Positive" };
+const TAGS  = { call:"🔔 Can't call staff", slow:"⏱ Slow service", face:"😐 Unfriendly welcome", promo:"📣 Promo ≠ reality", good:"👍 Positive", idea:"💡 Suggestion" };
 const LANGLBL = { am:"አማርኛ", lat:"Amharic (English letters)", en:"English" };
 const COLORS = ["#c0583a","#7a4fa3","#2f7fa8","#3a9a6b","#d98a1a","#b5446e","#4f6bd6","#8a6d3b"];
 
 /* ---------- Where each comment came from ----------
    W = website feedback form (most)   M = Maps   T = Telegram (social media)
    One letter per comment, in the same order as the list above. */
-const SRC_CODES = ["WWWMWW","TWTW","WMWWMW","WWM","TWW","WMWW","WWW","TW","WM","WW","T","WM","WWMWW","TWTWW","MWMWWW"].join("");
+const SRC_CODES = ["WWWMWW","TWTW","WMWWMW","WWM","TWW","WMWW","WWW","TW","WM","WW","T","WM","WWMWW","TWTWW","MWMWWW","WWWWTWWW","WWWWWM"].join("");
 const SRC_MAP = { W:"web", M:"map", T:"tg" };
 R.forEach((r, i) => { r.src = SRC_MAP[SRC_CODES[i]] || "web"; });
 const SRCS = [["all","All"],["web","Website"],["map","Maps"],["tg","Telegram (social media)"]];
@@ -463,13 +518,13 @@ function showApp(user){
   $("cafeName").textContent = CAFE.name;
   document.title = CAFE.name + " – Feedback";
   $("logoH").replaceChildren(logoEl(46));
-  buildStats(); buildSources(); buildChips(); render();
+  buildStats(); buildSources(); buildChips(); buildNotif(); render();
   setTimeout(() => document.querySelectorAll(".fill").forEach(f => f.style.width = f.dataset.w + "%"), 100);
 }
 $("loginForm").addEventListener("submit", e => {
   e.preventDefault();
   const u = $("u").value.trim(), p = $("p").value;
-  if (CAFE.users.includes(u) && p === CAFE.password){
+  if (CAFE.users.includes(u) && CAFE.passwords.includes(p)){
     try{ sessionStorage.setItem("fb_admin", u); }catch(_){}
     showApp(u);
   } else {
@@ -491,12 +546,13 @@ $("logout").addEventListener("click", () => {
 /* ---------- Stats (all computed from the comments) ---------- */
 const count = c => R.filter(r => r.c === c).length;
 function buildStats(){
-  const bad = R.filter(r => r.c !== "good").length, good = count("good");
+  const bad = R.filter(r => r.c !== "good" && r.c !== "idea").length, good = count("good");
   const avg = (R.reduce((a, r) => a + r.s, 0) / R.length).toFixed(1);
   $("stats").innerHTML = `
     <div class="stat"><b>${R.length}</b><span>Total comments</span></div>
     <div class="stat red"><b>${bad}</b><span>Complaints</span></div>
     <div class="stat green"><b>${good}</b><span>Positive comments</span></div>
+    <div class="stat"><b>${count("idea")}</b><span>Suggestions (iced drinks)</span></div>
     <div class="stat red"><b>${count("call")}</b><span>Complaints about not being able to call staff</span></div>
     <div class="stat"><b>${avg} ★</b><span>Average rating</span></div>`;
   const rows = [["call","No easy way to call staff (clapping / getting up)"],
@@ -514,6 +570,20 @@ function buildStats(){
 /* ---------- Filters ---------- */
 const state = { cat:"all", lang:"all", src:"all", q:"" };
 
+function buildNotif(){
+  const webToday = R.filter(r => r.d === 13 && r.src === "web").length;
+  const ideas = count("idea");
+  $("notif").innerHTML = `<div style="font-size:26px">🔔</div>
+    <div class="tx"><b>${webToday} new messages from the website today.</b><br>
+    ${ideas} customers are asking for iced drinks: why aren't we starting that?</div>
+    <button class="out" id="viewIdeas">View suggestions</button>`;
+  $("viewIdeas").addEventListener("click", () => {
+    const c = document.querySelector('#catChips .chip[data-v="idea"]');
+    if (c) c.click();
+    $("list").scrollIntoView({ behavior:"smooth" });
+  });
+}
+
 function buildSources(){
   const n = k => R.filter(r => r.src === k).length;
   const max = Math.max(...SRCS.slice(1).map(s => n(s[0])));
@@ -524,7 +594,7 @@ function buildSources(){
   }).join("");
 }
 function catCount(k){
-  return k === "all" ? R.length : k === "bad" ? R.filter(r => r.c !== "good").length : count(k);
+  return k === "all" ? R.length : k === "bad" ? R.filter(r => r.c !== "good" && r.c !== "idea").length : count(k);
 }
 function buildChips(){
   const mk = (box, defs, key, counter) => {
@@ -548,7 +618,7 @@ function buildChips(){
 $("q").addEventListener("input", e => { state.q = e.target.value.trim().toLowerCase(); render(); });
 
 function matches(r){
-  if (state.cat === "bad" && r.c === "good") return false;
+  if (state.cat === "bad" && (r.c === "good" || r.c === "idea")) return false;
   if (!["all","bad"].includes(state.cat) && r.c !== state.cat) return false;
   if (state.lang !== "all" && r.l !== state.lang) return false;
   if (state.src !== "all" && r.src !== state.src) return false;
@@ -568,7 +638,7 @@ function card(r){
   const stars = "★".repeat(r.s) + "<i>" + "★".repeat(5 - r.s) + "</i>";
   const rl = r.l === "am" ? "am" : "en";
   const reply = REPLY[rl][r.c][r.i % 2];
-  const rdate = "Nov " + Math.min(r.d + 1, 12) + ", 2026";
+  const rdate = "Nov " + Math.min(r.d + 1, 13) + ", 2026";
   el.innerHTML = `
     <div class="rv-top">
       <div class="avatar ${r.l === "am" ? "am" : ""}" style="background:${COLORS[r.i % COLORS.length]}">${r.n.charAt(0)}</div>
@@ -579,7 +649,8 @@ function card(r){
     <div class="rv-text ${r.l === "am" ? "am" : ""}">${r.t}</div>
     <div class="tags">
       <span class="tag src-${r.src}">Source: ${SRCLBL[r.src]}</span>
-      <span class="tag ${r.c === "call" ? "call" : r.c === "good" ? "good" : ""}">${TAGS[r.c]}</span>
+      ${r.d === 13 ? '<span class="tag new">NEW</span>' : ""}
+      <span class="tag ${["call","good","idea"].includes(r.c) ? r.c : ""}">${TAGS[r.c]}</span>
       <span class="tag lang">${LANGLBL[r.l]}</span>
       ${r.x ? '<button class="tr-btn">Show English</button>' : ""}
     </div>
