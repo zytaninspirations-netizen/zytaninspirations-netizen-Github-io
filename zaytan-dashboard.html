@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zaytan Control Dashboard</title>
+<style>
+:root{--bg:#0f1218;--panel:#171c25;--panel2:#1e2531;--line:#2a3342;--tx:#e8ecf3;--mut:#8b96a9;--acc:#4f9cff;--ok:#3ecf8e;--warn:#f5b73d;--bad:#ff6b6b;--vio:#a78bfa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+header h1{font-size:16px;margin:0}
+header small{color:var(--mut)}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{background:transparent;color:var(--mut);border:1px solid transparent;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px}
+nav button.on{background:var(--panel2);color:var(--tx);border-color:var(--line)}
+main{padding:14px;max-width:1200px;margin:0 auto}
+.grid{display:grid;gap:12px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.two{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.card h3{margin:0 0 10px;font-size:14px}
+.kpi b{display:block;font-size:26px}
+.kpi span{color:var(--mut);font-size:12px}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;border:1px solid var(--line);color:var(--mut)}
+.pill.ok{color:var(--ok);border-color:#1f5d44}.pill.bad{color:var(--bad);border-color:#6b2c2c}.pill.warn{color:var(--warn);border-color:#6b5420}.pill.hu{color:var(--vio);border-color:#4a3d80}.pill.acc{color:var(--acc);border-color:#27497a}
+input,select,textarea{background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;width:100%}
+textarea{min-height:80px;resize:vertical}
+button.b{background:var(--acc);color:#04101f;border:0;border-radius:8px;padding:8px 12px;font-weight:600;cursor:pointer}
+button.g{background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer}
+button.r{background:#3a1d1d;color:var(--bad);border:1px solid #6b2c2c;border-radius:8px;padding:7px 10px;cursor:pointer}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.row>*{flex:1;min-width:120px}.row>button{flex:0 0 auto}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mut);font-weight:500;font-size:12px}
+td select{padding:4px;width:auto}
+.bar{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc)}
+.bar.ok i{background:var(--ok)}
+.line{display:flex;justify-content:space-between;gap:8px;margin:7px 0;align-items:center}
+.line .n{min-width:130px;color:var(--mut)}
+.line .bar{flex:1}
+.item{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:10px;margin-bottom:8px}
+.item .meta{color:var(--mut);font-size:12px;margin-bottom:4px}
+.kan{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.empty{color:var(--mut);padding:8px}
+pre{white-space:pre-wrap;background:var(--panel2);padding:12px;border-radius:10px;border:1px solid var(--line);margin:0}
+.hide{display:none}
+.note{color:var(--mut);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Zaytan Control Dashboard</h1><small id="today"></small></div>
+  <nav id="nav"></nav>
+</header>
+<main id="main"></main>
+
+<script>
+/* ================= DATA ================= */
+const KEY = 'zaytan_dashboard_v1';
+const DEPTS = ['Executive','Operations','Finance','Technology','Marketing','Social Media','Support','Product','HR','Security','Data'];
+const ROLES = ['CEO (AI)','COO','CFO','CTO','CMO','CPO','CHRO','CISO','Social Media Manager','Content Creator','Data Analyst','Customer Support Lead','Staff'];
+const NAMES = `albert7807,djgreg,zackhere,Xxwearyrunnerxx,A_vega,moody-static,rocket.baker,canyon.shark28,xxferalBisonxx,BoldCoast3871,troy.memphis,JenniferGarcia981,Bumpyhunting,danthedrummer,victoriaramos13,laurengg827,dustybrowler_tv,Brucetexas,zzzquirkybaconzzz,lilsmoothcobalt,wizardsparkin,Mechanichd7967,dreamy.dodgson,Silverwaffle,randyramirez42,LosAngelesMarket2231,foggy.gambler1977,brucegriffin,bgarrett,carolwolf,litinyridoog,ac_chapman73,cass_je,willie.yl,Sammy_jones,waffelhikeIn,jolly_dodgers,charles_chavez,kingralph,trish_1976,D-Guzman,Xwearyturbox,marktheghost,MICHA3L_L1TTLE,lord-campers,lilgraycomb,Charlotte_Meadow,etucker1973,debrah,classic_sprietin,iam_margaret,losigardener2,browniridar,Natalieedaho,toni.maple,Lilliepixel,dapper_sprinter,Foggyorbit_0g,alicecg,mandy.anchor,noodle_hunts,quantumhunter,zzzwearytrader222,zzrastymustangzz,alexanderthesingar42,frostyranger6816,Gmburns22,eric_213,phillipgibson,Lnwd,Cumbriahedgehog6237,drdarkmeadow57,sharon.c,cmb1993,abigail.texas,andrea14ne,Thbrooks74,warm-sundae11,secret-fishing,Sturdyburrito9369,magic_ura,kingjoshuaf,realmargaret11,emilydegan,HomegrownEagleUS,MARIEMONTANA,Maker_Joker1980,ChicagoLeigh1996,m-fisher,gustavis007,dorothy_sa04,ronreynolds74,lunarbanjo2,CrumpetRobin9429,Tdr415,Valthequest,silentforges22,Phil.Painter,Cool_shark,rambleguy,Abitycarnpb3885,bigloudrebel,xxslybakerxx,TellyDukes314,flying.signal,amyers,Sunnybyte1234,lindaporter,Bearbrewer,slick_falcon,alice-kill99,alfoster9,Dydano,D_Fisher`.split(',');
+
+const EXEC_ROLES = [
+ ['CEO (AI)','Executive'],['COO','Operations'],['CFO','Finance'],['CTO','Technology'],['CMO','Marketing'],
+ ['CPO','Product'],['CHRO','HR'],['CISO','Security'],['Social Media Manager','Social Media'],
+ ['Social Media Manager','Social Media'],['Data Analyst','Data'],['Customer Support Lead','Support']
+];
+const STAFF_DEPTS = ['Operations','Finance','Technology','Marketing','Social Media','Support','Product','Data'];
+
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function uid(p){return p+Math.random().toString(36).slice(2,9);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function seed(){
+  const agents=[
+    {id:'h1',name:'ZAYTAN Admin',type:'human',role:'CEO (Human)',dept:'Executive',status:'active',pending:false},
+    {id:'h2',name:'Jakob',type:'human',role:'Owner',dept:'Executive',status:'active',pending:false},
+    {id:'h3',name:'Teddy',type:'human',role:'Admin',dept:'Executive',status:'active',pending:false}
+  ];
+  NAMES.forEach((n,i)=>{
+    const ex=EXEC_ROLES[i];
+    agents.push({id:'a'+(i+1),name:n,type:'ai',role:ex?ex[0]:'Staff',dept:ex?ex[1]:STAFF_DEPTS[(i-EXEC_ROLES.length)%STAFF_DEPTS.length],status:'active',pending:false});
+  });
+  return {agents,tasks:[],reports:[],priorities:[]};
+}
+let S = load();
+function load(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch(e){}return seed();}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const A = id => S.agents.find(a=>a.id===id);
+const ais = () => S.agents.filter(a=>a.type==='ai');
+const T = todayStr();
+
+/* ================= UI STATE ================= */
+let tab='overview', filt={q:'',dept:'',type:''}, repFilter={agent:'',kind:'',date:''};
+const TABS=[['overview','Overview'],['agents','Agents'],['today','Today / Tasks'],['reports','Reports & Journal'],['analysis','Analysis'],['data','Data']];
+const $=s=>document.querySelector(s);
+document.getElementById('today').textContent = new Date().toDateString()+' · Africa/Addis_Ababa';
+function renderNav(){$('#nav').innerHTML=TABS.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="go('${t[0]}')">${t[1]}</button>`).join('');}
+function go(t){tab=t;render();window.scrollTo(0,0);}
+function render(){renderNav();const m=$('#main');({overview:vOverview,agents:vAgents,today:vToday,reports:vReports,analysis:vAnalysis,data:vData})[tab](m);}
+
+/* ================= HELPERS ================= */
+function reportedToday(id){return S.reports.some(r=>r.agentId===id&&r.date===T);}
+function stats(){
+  const a=ais(), act=a.filter(x=>x.status==='active');
+  const rep=act.filter(x=>reportedToday(x.id));
+  const open=S.tasks.filter(t=>t.status!=='done'), done=S.tasks.filter(t=>t.status==='done');
+  const blockers=S.reports.filter(r=>r.date===T&&r.kind==='blocker');
+  return {total:S.agents.length,humans:S.agents.length-a.length,ai:a.length,active:act.length,paused:a.length-act.length,
+    rep:rep.length,pend:act.length-rep.length,open:open.length,done:done.length,blockers};
+}
+function bar(p,cls){return `<div class="bar ${cls||''}"><i style="width:${Math.max(0,Math.min(100,p))}%"></i></div>`;}
+function opts(arr,sel,blank){return (blank!=null?`<option value="">${blank}</option>`:'')+arr.map(x=>`<option ${x===sel?'selected':''}>${esc(x)}</option>`).join('');}
+function agentOpts(sel,blank){return (blank!=null?`<option value="">${blank}</option>`:'')+S.agents.map(a=>`<option value="${a.id}" ${a.id===sel?'selected':''}>${esc(a.name)} — ${esc(a.role)}</option>`).join('');}
+
+/* ================= OVERVIEW ================= */
+function vOverview(m){
+  const s=stats();
+  const execs=ais().filter(a=>a.dept!=='' && EXEC_ROLES.some(e=>e[0]===a.role)&&a.role!=='Staff');
+  m.innerHTML=`
+  <div class="grid kpis">
+    <div class="card kpi"><b>${s.total}</b><span>Total members</span></div>
+    <div class="card kpi"><b>${s.humans}</b><span>Humans (leadership)</span></div>
+    <div class="card kpi"><b>${s.ai}</b><span>AI agents</span></div>
+    <div class="card kpi"><b style="color:var(--ok)">${s.active}</b><span>Active agents</span></div>
+    <div class="card kpi"><b style="color:var(--warn)">${s.paused}</b><span>Paused agents</span></div>
+    <div class="card kpi"><b>${s.rep}/${s.active}</b><span>Reported today</span></div>
+    <div class="card kpi"><b>${s.open}</b><span>Open tasks</span></div>
+    <div class="card kpi"><b style="color:var(--bad)">${s.blockers.length}</b><span>Blockers today</span></div>
+  </div>
+  <div class="grid two" style="margin-top:12px">
+    <div class="card"><h3>Today's priorities</h3>
+      ${S.priorities.filter(p=>p.date===T).map(p=>`<div class="item">${esc(p.text)}</div>`).join('')||'<div class="empty">No priorities set. Add them in "Today / Tasks".</div>'}
+    </div>
+    <div class="card"><h3>Executive team status</h3>
+      <div class="tablewrap"><table><tr><th>Role</th><th>Agent</th><th>Today</th></tr>
+      ${execs.map(a=>`<tr><td>${esc(a.role)}</td><td>${esc(a.name)}</td><td>${a.status==='paused'?'<span class="pill warn">paused</span>':reportedToday(a.id)?'<span class="pill ok">reported</span>':a.pending?'<span class="pill acc">requested</span>':'<span class="pill bad">missing</span>'}</td></tr>`).join('')}
+      </table></div>
+    </div>
+  </div>
+  <div class="grid two" style="margin-top:12px">
+    <div class="card"><h3>Blockers today</h3>
+      ${s.blockers.map(r=>`<div class="item"><div class="meta">${esc((A(r.agentId)||{}).name)} · ${esc((A(r.agentId)||{}).role)}</div>${esc(r.text)}</div>`).join('')||'<div class="empty">None reported.</div>'}
+    </div>
+    <div class="card"><h3>Quick actions</h3>
+      <div class="row"><button class="b" onclick="requestAll()">Request reports from all active agents</button></div>
+      <div class="row"><button class="g" onclick="requestExecs()">Request from executives only</button><button class="g" onclick="go('analysis')">Open analysis</button></div>
+      <p class="note">"Request" flags agents as pending. Reports appear here when they are logged (manually or imported).</p>
+    </div>
+  </div>`;
+}
+function requestAll(){ais().forEach(a=>{if(a.status==='active'&&!reportedToday(a.id))a.pending=true;});save();render();}
+function requestExecs(){ais().forEach(a=>{if(a.status==='active'&&a.role!=='Staff'&&!reportedToday(a.id))a.pending=true;});save();render();}
+
+/* ================= AGENTS ================= */
+function vAgents(m){
+  const list=S.agents.filter(a=>
+    (!filt.q||a.name.toLowerCase().includes(filt.q.toLowerCase())||a.role.toLowerCase().includes(filt.q.toLowerCase()))&&
+    (!filt.dept||a.dept===filt.dept)&&(!filt.type||a.type===filt.type));
+  m.innerHTML=`<div class="card">
+    <div class="row">
+      <input id="fq" placeholder="Search name or role…" value="${esc(filt.q)}">
+      <select id="fd">${opts(DEPTS,filt.dept,'All departments')}</select>
+      <select id="ft"><option value="">Humans + AI</option><option value="ai" ${filt.type==='ai'?'selected':''}>AI only</option><option value="human" ${filt.type==='human'?'selected':''}>Humans only</option></select>
+    </div>
+    <div class="row">
+      <button class="g" onclick="bulk('active')">Activate all AI</button>
+      <button class="g" onclick="bulk('paused')">Pause all AI</button>
+      <button class="g" onclick="addAgent()">+ Add member</button>
+      <span class="note">${list.length} shown</span>
+    </div>
+    <div class="tablewrap"><table>
+      <tr><th>Name</th><th>Type</th><th>Role</th><th>Dept</th><th>Status</th><th>Today</th><th></th></tr>
+      ${list.map(a=>`<tr>
+        <td>${esc(a.name)}</td>
+        <td><span class="pill ${a.type==='human'?'hu':'acc'}">${a.type==='human'?'human':'AI'}</span></td>
+        <td>${a.type==='human'?esc(a.role):`<select onchange="setA('${a.id}','role',this.value)">${opts(ROLES,a.role)}</select>`}</td>
+        <td>${a.type==='human'?esc(a.dept):`<select onchange="setA('${a.id}','dept',this.value)">${opts(DEPTS,a.dept)}</select>`}</td>
+        <td>${a.type==='human'?'<span class="pill ok">online</span>':`<button class="g" onclick="toggle('${a.id}')">${a.status==='active'?'<span style="color:var(--ok)">● active</span>':'<span style="color:var(--warn)">❚❚ paused</span>'}</button>`}</td>
+        <td>${a.type==='human'?'—':reportedToday(a.id)?'<span class="pill ok">reported</span>':a.pending?'<span class="pill acc">requested</span>':'<span class="pill">none</span>'}</td>
+        <td><button class="g" onclick="setA('${a.id}','type','${a.type==='ai'?'human':'ai'}')">Mark ${a.type==='ai'?'human':'AI'}</button> <button class="r" onclick="delAgent('${a.id}')">✕</button></td>
+      </tr>`).join('')}
+    </table></div></div>`;
+  $('#fq').oninput=e=>{filt.q=e.target.value;const p=e.target.selectionStart;vAgents(m);const i=$('#fq');i.focus();i.setSelectionRange(p,p);};
+  $('#fd').onchange=e=>{filt.dept=e.target.value;vAgents(m);};
+  $('#ft').onchange=e=>{filt.type=e.target.value;vAgents(m);};
+}
+function setA(id,k,v){const a=A(id);a[k]=v;save();render();}
+function toggle(id){const a=A(id);a.status=a.status==='active'?'paused':'active';save();render();}
+function bulk(st){ais().forEach(a=>a.status=st);save();render();}
+function addAgent(){const n=prompt('Account name:');if(!n)return;S.agents.push({id:uid('a'),name:n.trim(),type:'ai',role:'Staff',dept:'Operations',status:'active',pending:false});save();render();}
+function delAgent(id){const a=A(id);if(!confirm('Remove '+a.name+'?'))return;S.agents=S.agents.filter(x=>x.id!==id);save();render();}
+
+/* ================= TODAY / TASKS ================= */
+function vToday(m){
+  const cols=[['todo','To do'],['doing','In progress'],['done','Done']];
+  m.innerHTML=`
+  <div class="grid two">
+    <div class="card"><h3>What are we doing today? (priorities)</h3>
+      <div class="row"><input id="np" placeholder="e.g. Launch new website banner"><button class="b" onclick="addPri()">Add</button></div>
+      ${S.priorities.filter(p=>p.date===T).map(p=>`<div class="item line"><span>${esc(p.text)}</span><button class="r" onclick="delPri('${p.id}')">✕</button></div>`).join('')||'<div class="empty">No priorities yet.</div>'}
+    </div>
+    <div class="card"><h3>What should be done? (new task)</h3>
+      <div class="row"><input id="nt" placeholder="Task title"></div>
+      <div class="row"><select id="nta">${agentOpts('','Assign to…')}</select><select id="ntp"><option>normal</option><option>high</option><option>low</option></select></div>
+      <div class="row"><button class="b" onclick="addTask()">Create task</button></div>
+    </div>
+  </div>
+  <div class="grid kan" style="margin-top:12px">
+  ${cols.map(c=>`<div class="card"><h3>${c[1]} (${S.tasks.filter(t=>t.status===c[0]).length})</h3>
+    ${S.tasks.filter(t=>t.status===c[0]).map(t=>`<div class="item"><div class="meta">${esc((A(t.agentId)||{name:'Unassigned'}).name)} · <span class="pill ${t.prio==='high'?'bad':''}">${t.prio}</span></div>${esc(t.title)}
+      <div class="row" style="margin:8px 0 0">${cols.filter(x=>x[0]!==c[0]).map(x=>`<button class="g" onclick="mv('${t.id}','${x[0]}')">→ ${x[1]}</button>`).join('')}<button class="r" onclick="delTask('${t.id}')">✕</button></div></div>`).join('')||'<div class="empty">Empty</div>'}
+  </div>`).join('')}
+  </div>`;
+}
+function addPri(){const v=$('#np').value.trim();if(!v)return;S.priorities.push({id:uid('p'),text:v,date:T});save();render();}
+function delPri(id){S.priorities=S.priorities.filter(p=>p.id!==id);save();render();}
+function addTask(){const t=$('#nt').value.trim();if(!t)return;S.tasks.push({id:uid('t'),title:t,agentId:$('#nta').value,prio:$('#ntp').value,status:'todo',created:T});save();render();}
+function mv(id,st){S.tasks.find(t=>t.id===id).status=st;save();render();}
+function delTask(id){S.tasks=S.tasks.filter(t=>t.id!==id);save();render();}
+
+/* ================= REPORTS ================= */
+function vReports(m){
+  const list=S.reports.filter(r=>(!repFilter.agent||r.agentId===repFilter.agent)&&(!repFilter.kind||r.kind===repFilter.kind)&&(!repFilter.date||r.date===repFilter.date)).sort((a,b)=>b.ts-a.ts);
+  m.innerHTML=`
+  <div class="card"><h3>Log a report / journal entry</h3>
+    <div class="row"><select id="ra">${agentOpts('','Select agent…')}</select>
+      <select id="rk"><option value="plan">Daily plan</option><option value="journal">End-of-day journal</option><option value="metrics">Metrics / data</option><option value="blocker">Blocker</option></select></div>
+    <div class="row"><textarea id="rt" placeholder="What was done / what will be done / data collected…"></textarea></div>
+    <div class="row"><button class="b" onclick="addReport()">Save entry</button></div>
+  </div>
+  <div class="card" style="margin-top:12px"><h3>Journal (${list.length})</h3>
+    <div class="row"><select id="rfa">${agentOpts(repFilter.agent,'All agents')}</select>
+      <select id="rfk"><option value="">All types</option>${['plan','journal','metrics','blocker'].map(k=>`<option ${repFilter.kind===k?'selected':''}>${k}</option>`).join('')}</select>
+      <input type="date" id="rfd" value="${repFilter.date}"></div>
+    ${list.map(r=>{const a=A(r.agentId)||{name:'?',role:''};return `<div class="item"><div class="meta">${r.date} · ${esc(a.name)} (${esc(a.role)}) · <span class="pill ${r.kind==='blocker'?'bad':'acc'}">${r.kind}</span> <button class="r" style="padding:1px 6px;float:right" onclick="delRep('${r.id}')">✕</button></div>${esc(r.text).replace(/\n/g,'<br>')}</div>`;}).join('')||'<div class="empty">No entries.</div>'}
+  </div>`;
+  $('#rfa').onchange=e=>{repFilter.agent=e.target.value;vReports(m);};
+  $('#rfk').onchange=e=>{repFilter.kind=e.target.value;vReports(m);};
+  $('#rfd').onchange=e=>{repFilter.date=e.target.value;vReports(m);};
+}
+function addReport(){
+  const id=$('#ra').value,t=$('#rt').value.trim();if(!id||!t){alert('Pick an agent and write something.');return;}
+  S.reports.push({id:uid('r'),agentId:id,kind:$('#rk').value,text:t,date:T,ts:Date.now()});
+  A(id).pending=false;save();render();
+}
+function delRep(id){S.reports=S.reports.filter(r=>r.id!==id);save();render();}
+
+/* ================= ANALYSIS ================= */
+function deptStats(){
+  return DEPTS.map(d=>{
+    const ag=ais().filter(a=>a.dept===d&&a.status==='active'); if(!ag.length)return null;
+    const rep=ag.filter(a=>reportedToday(a.id)).length;
+    const tk=S.tasks.filter(t=>ag.some(a=>a.id===t.agentId)); const dn=tk.filter(t=>t.status==='done').length;
+    return {d,n:ag.length,rep,tk:tk.length,dn};
+  }).filter(Boolean);
+}
+function digest(){
+  const s=stats(), ds=deptStats();
+  const miss=ais().filter(a=>a.status==='active'&&a.role!=='Staff'&&!reportedToday(a.id)).map(a=>a.role+' ('+a.name+')');
+  let o=`ZAYTAN DAILY DIGEST — ${T}\n\n`;
+  o+=`Team: ${s.humans} humans, ${s.ai} AI agents (${s.active} active, ${s.paused} paused)\n`;
+  o+=`Reports today: ${s.rep}/${s.active} active agents (${s.active?Math.round(s.rep/s.active*100):0}%)\n`;
+  o+=`Tasks: ${s.open} open, ${s.done} done\n\n`;
+  const pr=S.priorities.filter(p=>p.date===T);
+  o+=`PRIORITIES\n`+(pr.length?pr.map(p=>'- '+p.text).join('\n'):'- none set')+'\n\n';
+  o+=`BLOCKERS\n`+(s.blockers.length?s.blockers.map(r=>`- ${(A(r.agentId)||{}).role}: ${r.text}`).join('\n'):'- none')+'\n\n';
+  o+=`MISSING EXECUTIVE REPORTS\n`+(miss.length?miss.map(x=>'- '+x).join('\n'):'- none')+'\n\n';
+  o+=`BY DEPARTMENT\n`+ds.map(x=>`- ${x.d}: ${x.rep}/${x.n} reported, ${x.dn}/${x.tk} tasks done`).join('\n');
+  return o;
+}
+function vAnalysis(m){
+  const ds=deptStats(), s=stats();
+  const prio={high:0,normal:0,low:0};S.tasks.filter(t=>t.status!=='done').forEach(t=>prio[t.prio]++);
+  m.innerHTML=`<div class="grid two">
+    <div class="card"><h3>Report coverage by department (today)</h3>
+      ${ds.map(x=>`<div class="line"><span class="n">${x.d}</span>${bar(x.rep/x.n*100,'ok')}<span>${x.rep}/${x.n}</span></div>`).join('')}
+    </div>
+    <div class="card"><h3>Task completion by department</h3>
+      ${ds.map(x=>`<div class="line"><span class="n">${x.d}</span>${bar(x.tk?x.dn/x.tk*100:0)}<span>${x.dn}/${x.tk}</span></div>`).join('')}
+      <p class="note">Open tasks by priority — high: ${prio.high}, normal: ${prio.normal}, low: ${prio.low}</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px"><h3>Auto-generated daily digest</h3>
+    <pre id="dg">${esc(digest())}</pre>
+    <div class="row" style="margin-top:10px"><button class="b" onclick="copyDigest()">Copy</button><button class="g" onclick="dl('zaytan-digest-'+T+'.txt',digest(),'text/plain')">Download .txt</button></div>
+  </div>`;
+}
+function copyDigest(){navigator.clipboard&&navigator.clipboard.writeText(digest());}
+
+/* ================= DATA ================= */
+function vData(m){
+  m.innerHTML=`<div class="grid two">
+    <div class="card"><h3>Backup / transfer</h3>
+      <p class="note">All data lives in this browser (localStorage). Export to back it up or move it to another device.</p>
+      <div class="row"><button class="b" onclick="dl('zaytan-data-'+T+'.json',JSON.stringify(S,null,2),'application/json')">Export JSON</button>
+      <button class="g" onclick="$('#imp').click()">Import JSON</button><input type="file" id="imp" class="hide" accept=".json"></div>
+    </div>
+    <div class="card"><h3>Bulk-add reports (paste JSON)</h3>
+      <p class="note">Format: [{"agent":"account name","kind":"journal","text":"..."}]. Useful for pasting output from your AI bots.</p>
+      <textarea id="bj" placeholder='[{"agent":"albert7807","kind":"plan","text":"Review launch plan"}]'></textarea>
+      <div class="row" style="margin-top:8px"><button class="b" onclick="bulkAdd()">Add reports</button></div>
+    </div>
+    <div class="card"><h3>Demo & reset</h3>
+      <div class="row"><button class="g" onclick="demo()">Load sample reports & tasks</button><button class="r" onclick="if(confirm('Reset everything to defaults?')){S=seed();save();render();}">Reset all</button></div>
+    </div>
+  </div>`;
+  $('#imp').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.agents)throw 0;S=d;save();render();}catch(x){alert('Invalid file.');}};r.readAsText(f);};
+}
+function bulkAdd(){
+  try{const arr=JSON.parse($('#bj').value);let n=0;
+    arr.forEach(x=>{const a=S.agents.find(a=>a.name.toLowerCase()===String(x.agent).toLowerCase());if(!a||!x.text)return;
+      S.reports.push({id:uid('r'),agentId:a.id,kind:['plan','journal','metrics','blocker'].includes(x.kind)?x.kind:'journal',text:x.text,date:T,ts:Date.now()});a.pending=false;n++;});
+    save();alert(n+' report(s) added.');render();}catch(e){alert('Could not parse JSON.');}
+}
+function demo(){
+  const ex=ais().filter(a=>a.role!=='Staff').slice(0,8);
+  const txt={'CEO (AI)':'Reviewing company goals and aligning departments for the week.','COO':'Coordinating daily operations and scheduling.','CFO':'Reconciling expenses and updating budget forecast.','CTO':'Maintaining the website and deploying fixes.','CMO':'Planning campaign calendar and messaging.','CPO':'Collecting product feedback for next release.','CHRO':'Updating team roles and onboarding notes.','CISO':'Checking account access and security logs.'};
+  ex.forEach(a=>S.reports.push({id:uid('r'),agentId:a.id,kind:'plan',text:'[SAMPLE] '+(txt[a.role]||'Daily plan.'),date:T,ts:Date.now()}));
+  if(ex[3])S.reports.push({id:uid('r'),agentId:ex[3].id,kind:'blocker',text:'[SAMPLE] Waiting on final domain DNS settings.',date:T,ts:Date.now()});
+  S.priorities.push({id:uid('p'),text:'[SAMPLE] Publish weekly update to all channels',date:T});
+  S.tasks.push({id:uid('t'),title:'[SAMPLE] Draft social media posts',agentId:(ais().find(a=>a.role==='Social Media Manager')||{}).id||'',prio:'high',status:'doing',created:T},
+               {id:uid('t'),title:'[SAMPLE] Monthly budget summary',agentId:(ais().find(a=>a.role==='CFO')||{}).id||'',prio:'normal',status:'todo',created:T});
+  save();go('overview');
+}
+function dl(name,content,type){const b=new Blob([content],{type});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),500);}
+
+render();
+</script>
+</body>
+</html>
