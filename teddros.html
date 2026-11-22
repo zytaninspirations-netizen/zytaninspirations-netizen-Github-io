@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en" data-theme="sand">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teddros Aman — Photography &amp; Visual Work</title>
+<meta name="description" content="Teddros Aman, co-founder of Zaytan Inspirations. Photography, video and visual storytelling, alongside capital development and business growth.">
+<meta name="theme-color" content="#f6eadd">
+<meta property="og:title" content="Teddros Aman — Photography">
+<meta property="og:description" content="Photography and visual work by Teddros Aman, co-founder of Zaytan Inspirations.">
+<meta property="og:image" content="https://zaytan.site/images/teddros/hero.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2316120e'/%3E%3Cpath d='M7 10h18L16 25z' fill='%23ff4b1f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="sand"]{
+  --bg:#f6eadd; --bg2:#efe0cd; --text:#16120e; --muted:#6b5f53;
+  --line:rgba(22,18,14,.16); --accent:#ff4b1f; --accent-t:#d93a10; --onaccent:#fff;
+}
+[data-theme="ink"]{
+  --bg:#100e0c; --bg2:#1a1612; --text:#f6eadd; --muted:#a79a8b;
+  --line:rgba(246,234,221,.16); --accent:#ff6a3d; --accent-t:#ff8a63; --onaccent:#1a0b05;
+}
+:root{
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Inter Tight',system-ui,sans-serif;
+  --mono:'DM Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:1.02rem;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .4s,color .4s;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+ul{list-style:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{width:min(1280px,100% - 48px);margin-inline:auto}
+.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+.muted{color:var(--muted)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.02em;line-height:.95}
+h2{font-size:clamp(2.4rem,5.6vw,4.6rem)}
+em{font-style:italic;color:var(--accent)}
+section{padding:clamp(64px,9vw,120px) 0}
+
+/* header */
+header{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:16px clamp(18px,3vw,40px);mix-blend-mode:normal;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+header.solid{background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font:500 .9rem var(--sans);letter-spacing:.04em}
+.logo i{display:block;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:12px solid var(--accent)}
+nav.main{display:flex;gap:26px}
+nav.main a{font-size:.9rem;color:var(--muted);transition:color .2s}
+nav.main a:hover{color:var(--text)}
+.hdr-r{display:flex;align-items:center;gap:14px}
+.theme{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center}
+.theme i{width:14px;height:14px;border-radius:50%;background:linear-gradient(90deg,var(--text) 50%,transparent 50%);border:1.5px solid var(--text)}
+.pill{padding:9px 18px;border-radius:999px;background:var(--text);color:var(--bg);font-size:.86rem;font-weight:500;transition:background .2s,color .2s}
+.pill:hover{background:var(--accent);color:var(--onaccent)}
+
+/* hero */
+.hero{padding-top:110px;padding-bottom:50px}
+.hero-meta{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:18px;color:var(--muted)}
+.hero h1{font-size:clamp(4.2rem,17vw,15.5rem);line-height:.82;letter-spacing:-.045em;margin-left:-.04em}
+.hero h1 em{display:block;padding-left:clamp(0px,9vw,150px)}
+.hero-plate{display:grid;grid-template-columns:7fr 3fr;gap:clamp(14px,2vw,28px);margin-top:clamp(28px,4vw,54px);align-items:end}
+figure.ph{position:relative;overflow:hidden;background:repeating-linear-gradient(135deg,var(--bg2) 0 12px,transparent 12px 24px);border:1px solid var(--line)}
+figure.ph .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:16px;font:500 .68rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.8}
+figure.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-main{aspect-ratio:16/10}
+.hero-side{display:grid;gap:18px}
+.hero-side .pt{aspect-ratio:4/5}
+.hero-side p{font-size:.95rem;color:var(--muted);max-width:30ch}
+.cap{display:flex;justify-content:space-between;gap:12px;margin-top:10px;color:var(--muted)}
+
+/* statement */
+.statement{display:grid;grid-template-columns:1fr 2.2fr;gap:clamp(24px,5vw,80px)}
+.statement .big{font:400 clamp(1.8rem,3.8vw,3.2rem)/1.14 var(--serif);letter-spacing:-.015em}
+.statement .big span{color:var(--muted)}
+.facts{display:flex;gap:40px;flex-wrap:wrap;margin-top:40px;padding-top:24px;border-top:1px solid var(--line)}
+.facts div b{display:block;font:500 .95rem var(--sans);margin-top:4px}
+
+/* work */
+.work-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:34px}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{padding:8px 16px;border-radius:999px;border:1px solid var(--line);font-size:.86rem;color:var(--muted);transition:.2s}
+.filters button:hover{color:var(--text);border-color:var(--text)}
+.filters button.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.grid{columns:3;column-gap:clamp(14px,2vw,28px)}
+.shot{break-inside:avoid;margin-bottom:clamp(14px,2vw,28px);cursor:zoom-in;display:block;width:100%;text-align:left}
+.shot[hidden]{display:none}
+.shot figure.ph{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.shot:hover figure.ph{transform:scale(.985)}
+.shot .r-a{aspect-ratio:4/5}.shot .r-b{aspect-ratio:3/2}.shot .r-c{aspect-ratio:1/1}.shot .r-d{aspect-ratio:2/3}.shot .r-e{aspect-ratio:16/10}
+.shot .cap b{font:italic 400 1.15rem var(--serif);color:var(--text)}
+
+/* motion */
+.motion-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:clamp(14px,2vw,28px);margin-top:34px}
+.reel{position:relative;cursor:pointer;display:block;text-align:left;width:100%}
+.reel figure.ph{aspect-ratio:16/10}
+.reel.tall figure.ph{aspect-ratio:4/5}
+.reel .play{position:absolute;left:18px;bottom:18px;width:60px;height:60px;border-radius:50%;background:var(--accent);color:var(--onaccent);display:grid;place-items:center;transition:transform .25s}
+.reel:hover .play{transform:scale(1.1)}
+.reel .play svg{width:20px;fill:currentColor;margin-left:3px}
+.motion-grid .col{display:grid;gap:clamp(14px,2vw,28px)}
+
+/* beyond */
+.band{background:var(--text);color:var(--bg);border-radius:36px;margin-inline:12px;padding:clamp(48px,7vw,96px) 0}
+.band .mono,.band .muted{color:color-mix(in srgb,var(--bg) 62%,transparent)}
+.band em{color:var(--accent)}
+.band-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(28px,6vw,90px)}
+.roles{border-top:1px solid color-mix(in srgb,var(--bg) 22%,transparent)}
+.roles li{display:grid;grid-template-columns:48px 1fr;gap:14px;padding:22px 0;border-bottom:1px solid color-mix(in srgb,var(--bg) 22%,transparent)}
+.roles li span{font:400 .78rem var(--mono);color:var(--accent)}
+.roles h3{font-size:1.9rem;margin-bottom:6px}
+.roles p{color:color-mix(in srgb,var(--bg) 66%,transparent);font-size:.95rem;max-width:52ch}
+
+/* approach */
+.approach{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:40px;border-top:1px solid var(--line)}
+.approach div{padding:26px 28px 0 0;margin-right:28px;border-right:1px solid var(--line)}
+.approach div:last-child{border:0;margin:0}
+.approach i{font:italic 400 3.2rem/1 var(--serif);color:var(--accent);display:block;margin-bottom:14px}
+.approach h3{font-size:1.7rem;margin-bottom:8px}
+.approach p{color:var(--muted);font-size:.95rem}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,6vw,90px);align-items:start}
+.contact h2{font-size:clamp(3rem,8vw,7rem);line-height:.88}
+.form{display:grid;gap:16px}
+.form label{display:grid;gap:6px;font:400 .7rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.form input,.form select,.form textarea{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:transparent;color:var(--text);font:400 1rem var(--sans);text-transform:none;letter-spacing:0;transition:border-color .2s}
+.form select option{background:var(--bg);color:var(--text)}
+.form input:focus,.form select:focus,.form textarea:focus{outline:0;border-color:var(--accent)}
+.form textarea{min-height:120px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.btn{padding:14px 24px;border-radius:999px;border:1.5px solid var(--text);font-weight:500;font-size:.95rem;transition:.2s}
+.btn.fill{background:var(--accent);border-color:var(--accent);color:var(--onaccent)}
+.btn:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.direct{margin-top:30px;display:grid;gap:2px}
+.direct a{display:flex;justify-content:space-between;padding:14px 0;border-top:1px solid var(--line);transition:padding .25s,color .25s}
+.direct a:last-child{border-bottom:1px solid var(--line)}
+.direct a:hover{padding-left:12px;color:var(--accent-t)}
+.note{font-size:.8rem;color:var(--muted);margin-top:6px}
+
+footer{padding:34px 0 40px;border-top:1px solid var(--line)}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:.88rem}
+.foot nav{display:flex;gap:20px;flex-wrap:wrap}
+.foot a:hover{color:var(--text)}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:200;background:rgba(12,9,7,.95);display:grid;grid-template-rows:auto 1fr auto;padding:18px clamp(16px,3vw,40px) 22px;color:#f6eadd}
+.lb[hidden]{display:none}
+.lb-top{display:flex;justify-content:space-between;align-items:center}
+.lb-stage{display:grid;place-items:center;min-height:0;position:relative}
+.lb-stage img,.lb-stage video{max-width:100%;max-height:100%;object-fit:contain}
+.lb-stage .none{font:500 .75rem var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.7;text-align:center;line-height:1.9;border:1px dashed rgba(246,234,221,.35);padding:60px 40px;border-radius:12px}
+.lb-cap{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+.lb-cap b{font:italic 400 1.5rem var(--serif)}
+.lb button{padding:10px 16px;border:1px solid rgba(246,234,221,.3);border-radius:999px;font-size:.85rem;transition:.2s}
+.lb button:hover{background:#f6eadd;color:#16120e}
+.lb-nav{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
+.lb-nav button{pointer-events:auto;width:46px;height:46px;padding:0;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.35)}
+
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+noscript .rv{opacity:1}
+
+/* footer credit */
+.credit{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted)}
+.credit a{color:var(--text);border-bottom:1px solid var(--accent)}
+.credit a:hover{color:var(--accent-t)}
+
+/* scroll progress */
+.prog{position:fixed;top:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;z-index:120}
+
+/* hero name: letters rise out of a mask */
+.hero h1 .ln{display:block;overflow:hidden;padding:.04em .06em .1em 0;margin-bottom:-.06em}
+.hero h1 .ln:last-child{padding-left:clamp(0px,9vw,150px)}
+.hero h1 em{display:inline}
+.ch{display:inline-block}
+.js .ch{transform:translateY(108%);transition:transform 1s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--n) * 55ms + 150ms)}
+.js.go .ch{transform:none}
+.js .hero-meta,.js .hero-plate{opacity:0;transform:translateY(16px);transition:opacity .9s .5s,transform .9s .5s cubic-bezier(.2,.8,.2,1)}
+.js .hero-plate{transition-delay:.9s}
+.js.go .hero-meta,.js.go .hero-plate{opacity:1;transform:none}
+.hero-main,.hero-side .pt{overflow:hidden}
+.hero-main img,.hero-side .pt img{transform:scale(1.14);will-change:transform}
+
+/* marquee */
+.strip{overflow:hidden;border-block:1px solid var(--line);padding:14px 0;margin-top:clamp(30px,5vw,64px)}
+.strip div{display:flex;gap:40px;width:max-content;animation:run 38s linear infinite}
+.strip span{display:flex;align-items:center;gap:40px;font:italic 400 clamp(1.6rem,3.4vw,2.6rem) var(--serif);white-space:nowrap}
+.strip span::after{content:"";border-left:7px solid transparent;border-right:7px solid transparent;border-top:12px solid var(--accent)}
+.strip:hover div{animation-play-state:paused}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* gallery: photographs develop in, one after another */
+.shot.rv{transition-delay:var(--d,0s)}
+.shot figure.ph img{transition:transform .9s cubic-bezier(.2,.7,.2,1),opacity .6s}
+.shot:hover figure.ph img{transform:scale(1.05)}
+.shot .cap b{background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 1px no-repeat;transition:background-size .4s}
+.shot:hover .cap b{background-size:100% 1px}
+
+/* cursor label */
+.cur{position:fixed;left:0;top:0;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;background:var(--accent);color:var(--onaccent);display:grid;place-items:center;font:500 .68rem var(--mono);letter-spacing:.14em;text-transform:uppercase;pointer-events:none;z-index:300;transform:translate(-100px,-100px) scale(0);transition:opacity .2s}
+.cur span{transition:transform .3s}
+
+/* lightbox motion */
+.lb:not([hidden]){animation:lbin .3s ease}
+.lb-stage img,.lb-stage video{animation:zin .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes lbin{from{opacity:0}}
+@keyframes zin{from{opacity:0;transform:scale(.96)}}
+@media (prefers-reduced-motion:reduce){.js .ch,.js .hero-meta,.js .hero-plate{transform:none;opacity:1}.strip div{animation:none}.hero-main img,.hero-side .pt img{transform:none}.cur{display:none}}
+
+@media (max-width:980px){
+  nav.main{display:none}
+  .hero-plate,.statement,.band-grid,.contact,.motion-grid{grid-template-columns:1fr}
+  .hero-side{grid-template-columns:1fr 1fr;align-items:end}
+  .grid{columns:2}
+  .approach{grid-template-columns:1fr}
+  .approach div{border:0;margin:0;padding:22px 0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:560px){
+  .wrap{width:calc(100% - 32px)}
+  .grid{columns:1}
+  .row{grid-template-columns:1fr}
+  .pill{display:none}
+  .band{margin-inline:6px;border-radius:26px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="prog" id="prog"></div>
+<header id="hdr">
+  <a class="logo" href="#top" aria-label="Teddros Aman, top of page"><i></i>Teddros Aman</a>
+  <nav class="main" aria-label="Primary">
+    <a href="#work">Photographs</a>
+    <a href="#motion">Motion</a>
+    <a href="#beyond">Beyond the lens</a>
+    <a href="#approach">Approach</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="hdr-r">
+    <button class="theme" id="theme" aria-label="Switch between light and dark"><i></i></button>
+    <a class="pill" href="#contact">Book a shoot</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-meta mono"><span>Photography &amp; visual work</span><span>Co-founder, Zaytan Inspirations</span><span>Addis Ababa</span></div>
+    <h1 aria-label="Teddros Aman"><span class="ln" aria-hidden="true">Teddros</span><span class="ln" aria-hidden="true"><em>Aman</em></span></h1>
+    <div class="hero-plate">
+      <div>
+        <figure class="ph hero-main"><span class="lbl">hero.jpg<br>landscape, wide</span><img src="images/teddros/hero.jpg" alt="Photograph by Teddros Aman" onerror="this.remove()"></figure>
+        <div class="cap mono"><span>Plate 01</span><span>Replace caption — place, year</span></div>
+      </div>
+      <div class="hero-side">
+        <figure class="ph pt"><span class="lbl">portrait.jpg<br>4:5 portrait of Teddros</span><img src="images/teddros/portrait.jpg" alt="Portrait of Teddros Aman" onerror="this.remove()"></figure>
+        <p>I take photographs and make video, and I run the capital side of Zaytan Inspirations. Both come from paying close attention.</p>
+      </div>
+    </div>
+  </div>
+  <div class="strip" aria-hidden="true"><div>
+    <span>Photography</span><span>Video</span><span>Capital</span><span>Growth</span><span>Discipline</span><span>Creativity</span>
+    <span>Photography</span><span>Video</span><span>Capital</span><span>Growth</span><span>Discipline</span><span>Creativity</span>
+  </div></div>
+</section>
+
+<!-- STATEMENT -->
+<section style="padding-top:clamp(40px,6vw,80px)">
+  <div class="wrap statement">
+    <div class="mono muted rv">(01) Introduction</div>
+    <div class="rv">
+      <p class="big">Teddros Aman is a co-founder and CEO of Zaytan Inspirations. He works across capital development, trading, and personal and business growth, and he shoots photographs and video with the team. <span>This page is the picture side of that work.</span></p>
+      <div class="facts">
+        <div><span class="mono muted">Role</span><b>Co-founder · CEO</b></div>
+        <div><span class="mono muted">Camera work</span><b>Photography &amp; video content</b></div>
+        <div><span class="mono muted">Company</span><b><a href="https://zaytan.site" target="_blank" rel="noopener">zaytan.site</a></b></div>
+        <div><span class="mono muted">Reach</span><b>WhatsApp · Telegram · Call</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work" style="padding-top:0">
+  <div class="wrap">
+    <div class="work-head rv">
+      <div><div class="mono muted" style="margin-bottom:14px">(02) Photographs</div><h2>Selected <em>frames</em></h2></div>
+      <div class="filters" id="filters" role="group" aria-label="Filter photographs">
+        <button class="on" data-f="all">All</button>
+        <button data-f="people">People</button>
+        <button data-f="places">Places</button>
+        <button data-f="moments">Moments</button>
+        <button data-f="brand">Brand &amp; café</button>
+      </div>
+    </div>
+
+    <!--
+      HOW TO EDIT A PHOTO: each <button class="shot"> is one photograph.
+      data-cat   = people | places | moments | brand
+      data-title = the title shown under the photo and in the full-screen view
+      data-meta  = place and year, e.g. "Lalibela, 2026"
+      The image file is images/teddros/photo-NN.jpg (change the number to match).
+      To add a photo, copy one block, change the number, title and shape (r-a … r-e).
+      Shapes: r-a 4:5 portrait · r-b 3:2 landscape · r-c square · r-d 2:3 tall · r-e 16:10 wide
+    -->
+    <div class="grid" id="grid">
+      <button class="shot" data-cat="people" data-title="Untitled 01" data-meta="Place, 2026"><figure class="ph r-a"><span class="lbl">photo-01.jpg<br>4:5</span><img src="images/teddros/photo-01.jpg" alt="Untitled 01" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 01</b><span class="mono">01</span></div></button>
+      <button class="shot" data-cat="places" data-title="Untitled 02" data-meta="Place, 2026"><figure class="ph r-b"><span class="lbl">photo-02.jpg<br>3:2</span><img src="images/teddros/photo-02.jpg" alt="Untitled 02" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 02</b><span class="mono">02</span></div></button>
+      <button class="shot" data-cat="moments" data-title="Untitled 03" data-meta="Place, 2026"><figure class="ph r-d"><span class="lbl">photo-03.jpg<br>2:3</span><img src="images/teddros/photo-03.jpg" alt="Untitled 03" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 03</b><span class="mono">03</span></div></button>
+      <button class="shot" data-cat="brand" data-title="Untitled 04" data-meta="Café, 2026"><figure class="ph r-c"><span class="lbl">photo-04.jpg<br>square</span><img src="images/teddros/photo-04.jpg" alt="Untitled 04" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 04</b><span class="mono">04</span></div></button>
+      <button class="shot" data-cat="people" data-title="Untitled 05" data-meta="Place, 2026"><figure class="ph r-e"><span class="lbl">photo-05.jpg<br>16:10</span><img src="images/teddros/photo-05.jpg" alt="Untitled 05" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 05</b><span class="mono">05</span></div></button>
+      <button class="shot" data-cat="places" data-title="Untitled 06" data-meta="Place, 2026"><figure class="ph r-a"><span class="lbl">photo-06.jpg<br>4:5</span><img src="images/teddros/photo-06.jpg" alt="Untitled 06" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 06</b><span class="mono">06</span></div></button>
+      <button class="shot" data-cat="moments" data-title="Untitled 07" data-meta="Place, 2026"><figure class="ph r-b"><span class="lbl">photo-07.jpg<br>3:2</span><img src="images/teddros/photo-07.jpg" alt="Untitled 07" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 07</b><span class="mono">07</span></div></button>
+      <button class="shot" data-cat="brand" data-title="Untitled 08" data-meta="Café, 2026"><figure class="ph r-d"><span class="lbl">photo-08.jpg<br>2:3</span><img src="images/teddros/photo-08.jpg" alt="Untitled 08" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 08</b><span class="mono">08</span></div></button>
+      <button class="shot" data-cat="people" data-title="Untitled 09" data-meta="Place, 2026"><figure class="ph r-c"><span class="lbl">photo-09.jpg<br>square</span><img src="images/teddros/photo-09.jpg" alt="Untitled 09" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 09</b><span class="mono">09</span></div></button>
+      <button class="shot" data-cat="places" data-title="Untitled 10" data-meta="Place, 2026"><figure class="ph r-e"><span class="lbl">photo-10.jpg<br>16:10</span><img src="images/teddros/photo-10.jpg" alt="Untitled 10" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 10</b><span class="mono">10</span></div></button>
+      <button class="shot" data-cat="moments" data-title="Untitled 11" data-meta="Place, 2026"><figure class="ph r-a"><span class="lbl">photo-11.jpg<br>4:5</span><img src="images/teddros/photo-11.jpg" alt="Untitled 11" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 11</b><span class="mono">11</span></div></button>
+      <button class="shot" data-cat="brand" data-title="Untitled 12" data-meta="Café, 2026"><figure class="ph r-b"><span class="lbl">photo-12.jpg<br>3:2</span><img src="images/teddros/photo-12.jpg" alt="Untitled 12" onerror="this.remove()" loading="lazy"></figure><div class="cap"><b>Untitled 12</b><span class="mono">12</span></div></button>
+    </div>
+  </div>
+</section>
+
+<!-- MOTION -->
+<section id="motion" style="padding-top:0">
+  <div class="wrap">
+    <div class="rv"><div class="mono muted" style="margin-bottom:14px">(03) Motion</div><h2>Photographs that <em>move</em></h2></div>
+    <!-- Videos: put the files at images/teddros/reel-01.mp4 etc. and a thumbnail named reel-01.jpg. -->
+    <div class="motion-grid">
+      <button class="reel" data-video="images/teddros/reel-01.mp4" data-title="Reel 01" data-meta="Title, 2026"><figure class="ph"><span class="lbl">reel-01.jpg<br>thumbnail, 16:10<br>video: reel-01.mp4</span><img src="images/teddros/reel-01.jpg" alt="Reel 01" onerror="this.remove()" loading="lazy"></figure><span class="play"><svg viewBox="0 0 24 24"><path d="M6 4v16l14-8z"/></svg></span><div class="cap"><b style="font:italic 400 1.15rem var(--serif);color:var(--text)">Reel 01</b><span class="mono">Video</span></div></button>
+      <div class="col">
+        <button class="reel tall" data-video="images/teddros/reel-02.mp4" data-title="Reel 02" data-meta="Title, 2026"><figure class="ph"><span class="lbl">reel-02.jpg<br>thumbnail, 4:5<br>video: reel-02.mp4</span><img src="images/teddros/reel-02.jpg" alt="Reel 02" onerror="this.remove()" loading="lazy"></figure><span class="play"><svg viewBox="0 0 24 24"><path d="M6 4v16l14-8z"/></svg></span><div class="cap"><b style="font:italic 400 1.15rem var(--serif);color:var(--text)">Reel 02</b><span class="mono">Video</span></div></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEYOND THE LENS -->
+<div class="band" id="beyond">
+  <div class="wrap band-grid">
+    <div class="rv">
+      <div class="mono muted" style="margin-bottom:14px">(04) Beyond the lens</div>
+      <h2>The camera is <em>one</em> of three jobs.</h2>
+      <p class="muted" style="margin-top:22px;max-width:38ch">At Zaytan Inspirations, Teddros leads the money side of a company built on discipline, creativity and accountability.</p>
+    </div>
+    <ul class="roles rv">
+      <li><span>01</span><div><h3>Capital &amp; trading</h3><p>Building disciplined financial systems and pursuing capital growth, always with risk management. This funds the company's next stage.</p></div></li>
+      <li><span>02</span><div><h3>Growth, personal and business</h3><p>Helping people and businesses build habits and structures that last, rather than chasing one-off wins.</p></div></li>
+      <li><span>03</span><div><h3>Video &amp; photography</h3><p>Creating visual content with the Zaytan team, from café promotions to advertising work.</p></div></li>
+      <li><span>→</span><div><h3>What comes next</h3><p>Expanding into physical assets and larger projects funded by that capital, then giving part of the company's future success back to charity and community support.</p></div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- APPROACH -->
+<section id="approach">
+  <div class="wrap">
+    <div class="rv"><div class="mono muted" style="margin-bottom:14px">(05) Approach</div><h2>How I <em>shoot</em></h2></div>
+    <!-- Edit these three paragraphs so they sound like you. -->
+    <div class="approach rv">
+      <div><i>01</i><h3>Look first</h3><p>Spend time with the place and the people before lifting the camera. The best frame is usually the one you waited for.</p></div>
+      <div><i>02</i><h3>Keep it honest</h3><p>Natural light, real expressions, minimal staging. The picture should feel like the moment, not a copy of it.</p></div>
+      <div><i>03</i><h3>Deliver clean</h3><p>Edited consistently, sized for where it will live, and handed over on time, whether for a café menu or a campaign.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="padding-top:0">
+  <div class="wrap contact">
+    <div class="rv">
+      <div class="mono muted" style="margin-bottom:14px">(06) Contact</div>
+      <h2>Let's make<br>something <em>worth looking at.</em></h2>
+      <div class="direct">
+        <a href="https://wa.me/251923231497" target="_blank" rel="noopener"><span>WhatsApp</span><span>+251 923 231 497</span></a>
+        <a href="https://t.me/ZAYTANS" target="_blank" rel="noopener"><span>Telegram</span><span>@ZAYTANS</span></a>
+        <a href="tel:+251923231497"><span>Call</span><span>+251 923 231 497</span></a>
+      </div>
+    </div>
+    <form class="form rv" id="form" novalidate onsubmit="return false">
+      <div class="row">
+        <label>Your name<input id="fName" autocomplete="name"></label>
+        <label>What is it for?
+          <select id="fType"><option>Portrait session</option><option>Café / restaurant photos</option><option>Event coverage</option><option>Brand or campaign</option><option>Photo + video package</option><option>Something else</option></select>
+        </label>
+      </div>
+      <label>When and where<input id="fWhen" placeholder="e.g. mid-December, Bole"></label>
+      <label>Tell me about it<textarea id="fMsg" placeholder="What you have in mind, how many people, where the pictures will be used…"></textarea></label>
+      <div class="btns">
+        <button type="button" class="btn fill" id="sendWa">Send on WhatsApp</button>
+        <button type="button" class="btn" id="sendTg">Copy &amp; open Telegram</button>
+      </div>
+      <p class="note" id="err" hidden style="color:var(--accent-t)">Please add your name and a few words about the job.</p>
+      <p class="note">Nothing is sent until you press send inside the app.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="yr"></span> Zaytan Inspirations. All rights reserved.</span>
+    <nav aria-label="Footer">
+      <a href="https://zaytan.site">Zaytan Inspirations</a>
+      <a href="https://zaytan.site/zeki.html">Zeki Abebe</a>
+      <a href="https://zaytan.site/jacob.html">Yakob Belete</a>
+    </nav>
+  </div>
+  <div class="wrap credit mono">Website developed by <a href="https://zaytan.site">Zaytan Inspirations</a> · Coded by <a href="https://zaytan.site/zeki.html">Zeki Abebe</a></div>
+</footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Photograph viewer">
+  <div class="lb-top"><span class="mono" id="lbCount"></span><button id="lbClose" type="button">Close</button></div>
+  <div class="lb-stage" id="lbStage">
+    <div class="lb-nav"><button id="lbPrev" type="button" aria-label="Previous">←</button><button id="lbNext" type="button" aria-label="Next">→</button></div>
+  </div>
+  <div class="lb-cap"><b id="lbTitle"></b><span class="mono" id="lbMeta"></span></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,c){return (c||document).querySelector(s)};
+var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+var root=document.documentElement;
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+
+/* theme */
+function setTheme(t){root.dataset.theme=t;store('ta-theme',t);var m=$('meta[name="theme-color"]');if(m)m.content=t==='ink'?'#100e0c':'#f6eadd'}
+setTheme(store('ta-theme')||'sand');
+$('#theme').addEventListener('click',function(){setTheme(root.dataset.theme==='ink'?'sand':'ink')});
+
+/* header */
+var hdr=$('#hdr');
+function onScroll(){hdr.classList.toggle('solid',scrollY>40)}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* reveal */
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});
+$$('.rv').forEach(function(el){io.observe(el)});
+
+/* filters */
+var shots=$$('.shot');
+$$('#filters button').forEach(function(b){b.addEventListener('click',function(){
+  $$('#filters button').forEach(function(x){x.classList.toggle('on',x===b)});
+  var f=b.dataset.f;
+  shots.forEach(function(s){s.hidden=!(f==='all'||s.dataset.cat===f)});
+})});
+
+/* lightbox (photos + videos) */
+var lb=$('#lb'),stage=$('#lbStage'),items=[],idx=0,lastFocus=null;
+function list(){
+  items=$$('.shot:not([hidden])').map(function(el){return {el:el,type:'img'}});
+  return items;
+}
+function clearStage(){$$('img,video,.none',stage).forEach(function(n){n.remove()})}
+function show(i){
+  if(!items.length)return;
+  idx=(i+items.length)%items.length;
+  var it=items[idx],el=it.el;
+  clearStage();
+  var nav=$('.lb-nav',stage);
+  if(it.type==='video'){
+    var v=document.createElement('video');v.controls=true;v.autoplay=true;v.playsInline=true;v.src=el.dataset.video;
+    v.onerror=function(){v.remove();stage.insertBefore(none(el.dataset.video+'<br>not found'),nav)};
+    stage.insertBefore(v,nav);
+  }else{
+    var im=$('img',el);
+    if(im){var n=document.createElement('img');n.src=im.getAttribute('src');n.alt=el.dataset.title;stage.insertBefore(n,nav)}
+    else stage.insertBefore(none($('.lbl',el).innerHTML),nav);
+  }
+  $('#lbTitle').textContent=el.dataset.title||'';
+  $('#lbMeta').textContent=el.dataset.meta||'';
+  $('#lbCount').textContent=(idx+1)+' / '+items.length;
+}
+function none(t){var d=document.createElement('div');d.className='none';d.innerHTML=t;return d}
+function open(arr,i){
+  items=arr;lastFocus=document.activeElement;lb.hidden=false;document.body.style.overflow='hidden';
+  $('.lb-nav',lb).style.display=arr.length>1?'flex':'none';
+  show(i);$('#lbClose').focus();
+}
+function close(){lb.hidden=true;clearStage();document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+shots.forEach(function(s){s.addEventListener('click',function(){
+  var arr=list();open(arr,arr.findIndex(function(x){return x.el===s}));
+})});
+$$('.reel').forEach(function(r){r.addEventListener('click',function(){open([{el:r,type:'video'}],0)})});
+$('#lbClose').addEventListener('click',close);
+$('#lbPrev').addEventListener('click',function(){show(idx-1)});
+$('#lbNext').addEventListener('click',function(){show(idx+1)});
+lb.addEventListener('click',function(e){if(e.target===lb||e.target===stage)close()});
+addEventListener('keydown',function(e){
+  if(lb.hidden)return;
+  if(e.key==='Escape')close();
+  else if(e.key==='ArrowRight')show(idx+1);
+  else if(e.key==='ArrowLeft')show(idx-1);
+});
+var tx=0;
+lb.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
+lb.addEventListener('touchend',function(e){var d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)show(idx+(d<0?1:-1))},{passive:true});
+
+/* contact: compose message, user sends it themselves */
+function msg(){
+  return 'Hello Teddros 👋\n\nName: '+$('#fName').value.trim()+'\nJob: '+$('#fType').value+'\nWhen / where: '+($('#fWhen').value.trim()||'to discuss')+'\n\n'+$('#fMsg').value.trim();
+}
+function valid(){var ok=$('#fName').value.trim()&&$('#fMsg').value.trim();$('#err').hidden=!!ok;return !!ok}
+$('#sendWa').addEventListener('click',function(){if(valid())window.open('https://wa.me/251923231497?text='+encodeURIComponent(msg()),'_blank','noopener')});
+$('#sendTg').addEventListener('click',function(){
+  if(!valid())return;
+  function go(){window.open('https://t.me/ZAYTANS','_blank','noopener')}
+  if(navigator.clipboard)navigator.clipboard.writeText(msg()).then(go,go);else go();
+});
+
+var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+/* hero name: split into letters */
+root.classList.add('js');
+$$('.hero h1 .ln').forEach(function(ln,li){
+  var n=0;
+  (function walk(node){
+    Array.prototype.slice.call(node.childNodes).forEach(function(c){
+      if(c.nodeType===3){
+        var f=document.createDocumentFragment();
+        c.textContent.split('').forEach(function(ch){var s=document.createElement('span');s.className='ch';s.style.setProperty('--n',n+li*7);n++;s.textContent=ch;f.appendChild(s)});
+        node.replaceChild(f,c);
+      }else walk(c);
+    });
+  })(ln);
+});
+function go(){root.classList.add('go')}
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){setTimeout(go,80)});else setTimeout(go,300);
+setTimeout(go,1800);
+
+/* progress bar + hero parallax */
+var prog=$('#prog'),pars=$$('.hero-main img,.hero-side .pt img'),tick=false;
+function frame(){
+  var h=document.documentElement.scrollHeight-innerHeight;
+  prog.style.transform='scaleX('+(h>0?scrollY/h:0)+')';
+  if(!reduce&&scrollY<innerHeight*1.4)pars.forEach(function(im){im.style.transform='translateY('+(scrollY*.06)+'px) scale(1.14)'});
+  tick=false;
+}
+addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(frame)}},{passive:true});frame();
+
+/* gallery shots develop in with a stagger */
+shots.forEach(function(s,i){s.classList.add('rv');s.style.setProperty('--d',(i%3)*.09+'s');io.observe(s)});
+
+/* cursor label over photographs and reels */
+if(fine&&!reduce){
+  var cur=document.createElement('div');cur.className='cur';cur.innerHTML='<span></span>';document.body.appendChild(cur);
+  var cs=$('span',cur),x=0,y=0,tx2=0,ty2=0,sc=0,tsc=0;
+  addEventListener('pointermove',function(e){
+    tx2=e.clientX;ty2=e.clientY;
+    var t=e.target.closest&&e.target.closest('.shot,.reel');
+    if(t&&lb.hidden){tsc=1;cs.textContent=t.classList.contains('reel')?'Play':'View'}else tsc=0;
+  },{passive:true});
+  (function loop(){x+=(tx2-x)*.18;y+=(ty2-y)*.18;sc+=(tsc-sc)*.2;cur.style.transform='translate('+x+'px,'+y+'px) scale('+sc+')';requestAnimationFrame(loop)})();
+
+  /* magnetic Book a shoot button */
+  var mg=$('.pill');
+  mg.addEventListener('pointermove',function(e){var r=mg.getBoundingClientRect();mg.style.transform='translate('+((e.clientX-r.left-r.width/2)*.2)+'px,'+((e.clientY-r.top-r.height/2)*.3)+'px)'});
+  mg.addEventListener('pointerleave',function(){mg.style.transform=''});
+}
+
+$('#yr').textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
